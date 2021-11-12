@@ -1,5 +1,3 @@
-console.clear();
-
 const { Client } = require("eris");
 
 const { init } = require("@sentry/node");
