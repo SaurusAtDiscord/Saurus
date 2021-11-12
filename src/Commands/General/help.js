@@ -76,8 +76,8 @@ module.exports = class Help extends Command {
                 return interaction.createFollowup(new Embed({
                     title: `${is_cmd.category} : ${is_cmd.name.upperFirst()}`,
                     fields: [
-                        { name: "Description", value: is_cmd.description ?? "No Description Provided" },
-                        { name: "Usage", value: ("**/**" + is_cmd.usage) ?? "No Example Provided" }
+                        { name: "Description", value: is_cmd.description ?? "No description provided" },
+                        { name: "Usage", value: `**/**${is_cmd.usage}` ?? "No example provided" }
                     ]
                 }).parse());
             }
