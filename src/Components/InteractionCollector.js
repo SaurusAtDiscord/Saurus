@@ -25,10 +25,10 @@ class InteractionHandler extends EventEmitter {
 				return true;
 			}
 
-			return null;
-		} else {
-			return false;
+			return;
 		}
+
+		return false;
 	}
 
 	/**
