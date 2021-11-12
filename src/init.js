@@ -1,4 +1,4 @@
-require("module-alias");
+require("module-alias/register");
 require("dotenv").config();
 
 const Saurus = require("@structures/Client");

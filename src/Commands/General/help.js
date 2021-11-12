@@ -2,7 +2,7 @@ const Command = require("@structures/Command");
 
 const ButtonHelper = require("@components/ComponentHandler");
 const Embed = require("@components/Embed");
-const createMessageButtonCollector = require("@components/InteractionCollector");
+const { collectInteractions } = require("@components/InteractionCollector");
 
 const { Constants } = require("eris");
 
@@ -37,7 +37,7 @@ module.exports = class Help extends Command {
                 description: `Selectable categories: \`${this.client.categories.join(", ")}\``
             }).addComponents(component.parse()));
 
-            await createMessageButtonCollector.collectInteractions({
+            await collectInteractions({
                 client: this.client,
                 interaction,
                 time: 60000,
