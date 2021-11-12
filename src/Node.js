@@ -2,4 +2,5 @@ require("module-alias/register");
 require("dotenv").config();
 
 const SaurusNode = require("@structures/Client");
-new SaurusNode(process.env.KEY).Initiate();
+void new SaurusNode(process.env.KEY).Initiate();
+asshole
