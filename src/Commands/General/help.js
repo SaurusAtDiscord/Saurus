@@ -53,7 +53,7 @@ module.exports = class Help extends Command {
                 return interaction.editOriginalMessage(new Embed({
                     title: is_category,
                     description: `This category consists of ${this.client.commands.filter(cmd => cmd.category === is_category).length} commands.`,
-                    fields: fields
+                    fields
                 }).parse());
             })
             .on("end", () => {
@@ -70,7 +70,7 @@ module.exports = class Help extends Command {
                 return interaction.createFollowup(new Embed({
                     title: is_category,
                     description: `This category consists of ${this.client.commands.filter(cmd => cmd.category === is_category).length} commands.`,
-                    fields: fields
+                    fields
                 }).parse());
             } else if (is_cmd) {
                 return interaction.createFollowup(new Embed({

@@ -11,22 +11,19 @@ class InteractionHandler extends EventEmitter {
 		this.listener = (interaction) => this.checkPreConditions(interaction);
 		this.options.client.on('interactionCreate', this.listener);
 
-		if (options.time) {
-			setTimeout(() => this.stopListening('time'), options.time);
-		}
+		if (options.time) setTimeout(() => this.stopListening('time'), options.time);
 	}
 
 	checkPreConditions(interaction) {
 		if (this.options.filter(interaction)) {
 			this.emit('collect', interaction);
 			this.collected.push({ interaction });
-
+			
 			if (this.collected.length >= this.options.maxMatches) {
 				this.stopListening('maxMatches');
 				return true;
 			}
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
