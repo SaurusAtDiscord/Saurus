@@ -1,6 +1,6 @@
 'use strict';
 
-const EventEmitter = require("eventemitter3");
+const EventEmitter = require('eventemitter3');
 
 class InteractionHandler extends EventEmitter {
 	constructor(options = {}) {
@@ -10,8 +10,8 @@ class InteractionHandler extends EventEmitter {
 		this.ended = false;
 		this.collected = [];
 		this.listener = (interaction) => this.checkPreConditions(interaction);
+		
 		this.options.client.on('interactionCreate', this.listener);
-
 		if (options.time) setTimeout(() => this.stopListening('time'), options.time);
 	}
 

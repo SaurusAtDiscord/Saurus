@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const { Constants } = require("eris");
+const { Constants } = require('eris');
 
 module.exports = class ButtonHelper {
     constructor(maxRows) {

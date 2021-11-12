@@ -1,26 +1,26 @@
-"use strict";
+'use strict';
 
-const Command = require("@structures/Command");
+const Command = require('@structures/Command');
 
-const ButtonHelper = require("@components/ComponentHandler");
-const Embed = require("@components/Embed");
+const ButtonHelper = require('@components/ComponentHandler');
+const Embed = require('@components/Embed');
 
-const { awaitInteractions } = require("@components/InteractionCollector");
+const { awaitInteractions } = require('@components/InteractionCollector');
 
-const { Constants } = require("eris");
+const { Constants } = require('eris');
 
 module.exports = class Help extends Command {
     constructor(client) {
         super(client, {
-            name: "help",
-            description: "Provides bot assets or basic information",
-            usage: "help (command_or_category)",
-            category: "General",
+            name: 'help',
+            description: 'Provides bot assets or basic information',
+            usage: 'help (command_or_category)',
+            category: 'General',
             
             options: [{
-                "name": "command_or_category",
-                "description": "Get information on a specific command or category.",
-                "type": Constants.ApplicationCommandOptionTypes.STRING
+                'name': 'command_or_category',
+                'description': 'Get information on a specific command or category.',
+                'type': Constants.ApplicationCommandOptionTypes.STRING
             }]
         });
     }
@@ -36,8 +36,8 @@ module.exports = class Help extends Command {
             });
             
             interaction.createFollowup(new Embed({
-                title: "Help",
-                description: `Selectable categories: \`${this.client.categories.join(", ")}\``
+                title: 'Help',
+                description: `Selectable categories: \`${this.client.categories.join(', ')}\``
             }).addComponents(component.parse()));
 
             return awaitInteractions({
@@ -46,8 +46,8 @@ module.exports = class Help extends Command {
                 time: 60000,
                 filter: i => (i.message.channel.id === interaction.channel.id) && (interaction.member?.id === this.client.extensions.string.splitNumbers(i.data?.custom_id))
             })
-            .on("collect", res => {
-                const is_category = this.client.categories.find(category => category.toLowerCase() === res.data.custom_id.split(" ")[1].toLowerCase());
+            .on('collect', res => {
+                const is_category = this.client.categories.find(category => category.toLowerCase() === res.data.custom_id.split(' ')[1].toLowerCase());
                 
                 const fields = [];
                 this.client.commands.filter(cmd => cmd.category === is_category).forEach(cmd => fields.push({ name: cmd.name, value: cmd.description }));
@@ -59,8 +59,8 @@ module.exports = class Help extends Command {
                     fields
                 }).parse());
             })
-            .on("end", () => {
-                interaction.editOriginalMessage(new Embed({ description: "This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button" }).addComponents(null))
+            .on('end', () => {
+                interaction.editOriginalMessage(new Embed({ description: 'This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button' }).addComponents(null))
             });
         }
 
@@ -80,8 +80,8 @@ module.exports = class Help extends Command {
             return interaction.createFollowup(new Embed({
                 title: `${is_cmd.category} : ${this.client.extensions.string.upperFirst(is_cmd.name)}`,
                 fields: [
-                    { name: "Description", value: is_cmd.description ?? "No description provided" },
-                    { name: "Usage", value: `**/**${is_cmd.usage}` ?? "No example provided" }
+                    { name: 'Description', value: is_cmd.description ?? 'No description provided' },
+                    { name: 'Usage', value: `**/**${is_cmd.usage}` ?? 'No example provided' }
                 ]
             }).parse());
         }

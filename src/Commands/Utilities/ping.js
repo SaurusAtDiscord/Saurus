@@ -1,14 +1,14 @@
-"use strict";
+'use strict';
 
-const Command = require("@structures/Command");
-const Embed = require("@components/Embed");
+const Command = require('@structures/Command');
+const Embed = require('@components/Embed');
 
 module.exports = class Ping extends Command {
     constructor(client) {
         super(client, {
-            name: "ping",
-            description: "Informs you of my ping",
-            category: "Utilities"
+            name: 'ping',
+            description: 'Informs you of my ping',
+            category: 'Utilities'
         });
     }
 

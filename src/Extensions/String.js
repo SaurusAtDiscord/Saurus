@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = {
     upperFirst: string => {
@@ -6,6 +6,6 @@ module.exports = {
     },
 
     splitNumbers: string => {
-        return string.replace(/[^0-9]/g, "");
+        return string.replace(/[^0-9]/g, '');
     }
 }

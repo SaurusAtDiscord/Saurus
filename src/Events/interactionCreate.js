@@ -1,15 +1,15 @@
-"use strict";
+'use strict';
 
-const Event = require("@structures/Event");
+const Event = require('@structures/Event');
 
 module.exports = class interactionCreate extends Event {
     async execute(Interaction) {
-        if (Interaction.constructor.name !== "CommandInteraction") return;
+        if (Interaction.constructor.name !== 'CommandInteraction') return;
         
         const command = this.client.commands.find(cmd => cmd.name === Interaction.data.name.toLowerCase());
         if (!command) return;
 
-        await Interaction.defer(Interaction.data.name === "help" ? 64 : undefined);
+        await Interaction.defer(Interaction.data.name === 'help' ? 64 : undefined);
         
         const Args = {};
         Interaction.data.options?.forEach(input => Args[input.name] = input.value);
