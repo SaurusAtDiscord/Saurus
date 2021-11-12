@@ -5,12 +5,12 @@ module.exports = class Library {
         this.client = client;
     }
 
-    async deleteCommand(commandId) {
+    deleteCommand(commandId) {
         if (process.env.NODE_ENV === "development") this.client.deleteGuildCommand("887396392497184778", commandId)
         else this.client.deleteCommand(commandId);
     }
 
-    async createCommand(context) {
+    createCommand(context) {
         if (process.env.NODE_ENV === "development") this.client.bulkEditGuildCommands("887396392497184778", context)
         else this.client.bulkEditCommands(context);
     }
