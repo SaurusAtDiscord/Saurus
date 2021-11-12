@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = class Embed {
     constructor(obj) {
         this.embed = { embeds: [obj] };

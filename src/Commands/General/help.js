@@ -1,3 +1,5 @@
+"use strict";
+
 const Command = require("@structures/Command");
 
 const ButtonHelper = require("@components/ComponentHandler");
@@ -37,7 +39,7 @@ module.exports = class Help extends Command {
                 description: `Selectable categories: \`${this.client.categories.join(", ")}\``
             }).addComponents(component.parse()));
 
-            await collectInteractions({
+            return await collectInteractions({
                 client: this.client,
                 interaction,
                 time: 60000,

@@ -1,3 +1,5 @@
+"use strict";
+
 const { Constants } = require("eris");
 
 module.exports = class ButtonHelper {

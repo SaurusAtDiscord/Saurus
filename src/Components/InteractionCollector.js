@@ -23,6 +23,8 @@ class InteractionHandler extends EventEmitter {
 				this.stopListening('maxMatches');
 				return true;
 			}
+
+			return null;
 		} else {
 			return false;
 		}

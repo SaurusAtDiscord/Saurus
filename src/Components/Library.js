@@ -1,7 +1,9 @@
-const SuperAgent = require("superagent");
+"use strict";
 
-module.exports = class Library {
+const SuperAgent = require("superagent");
+module.exports = class Library extends SuperAgent {
     constructor(client) {
+        super();
         this.client = client;
     }
 
@@ -16,14 +18,14 @@ module.exports = class Library {
     }
 
     async getGuild(guildId) {
-        return this.client.guilds.get(guildId) ?? (await SuperAgent.get(`https://discord.com/api/v9/guilds/${guildId}`).set("Authorization", `Bot ${process.env.KEY}`)).body;
+        return this.client.guilds.get(guildId) ?? (await this.get(`https://discord.com/api/v9/guilds/${guildId}`).set("Authorization", `Bot ${process.env.KEY}`)).body;
     }
 
     async getUser(userId) {
-        return this.client.users.get(userId) ?? (await SuperAgent.get(`https://discord.com/api/v9/users/${userId}`).set("Authorization", `Bot ${process.env.KEY}`)).body;
+        return this.client.users.get(userId) ?? (await this.get(`https://discord.com/api/v9/users/${userId}`).set("Authorization", `Bot ${process.env.KEY}`)).body;
     }
 
     async getMember(userId, guildId) {
-        return (await SuperAgent.get(`https://discord.com/api/v9/guilds/${guildId}/members/${userId}`).set("Authorization", `Bot ${process.env.KEY}`)).body;
+        return (await this.get(`https://discord.com/api/v9/guilds/${guildId}/members/${userId}`).set("Authorization", `Bot ${process.env.KEY}`)).body;
     }
 }

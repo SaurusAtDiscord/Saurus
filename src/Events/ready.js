@@ -1,3 +1,5 @@
+"use strict";
+
 const Event = require('@structures/Event');
 
 module.exports = class ready extends Event {
