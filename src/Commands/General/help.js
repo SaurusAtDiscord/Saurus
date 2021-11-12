@@ -39,7 +39,7 @@ module.exports = class Help extends Command {
                 description: `Selectable categories: \`${this.client.categories.join(", ")}\``
             }).addComponents(component.parse()));
 
-            return await collectInteractions({
+            await collectInteractions({
                 client: this.client,
                 interaction,
                 time: 60000,
@@ -61,6 +61,8 @@ module.exports = class Help extends Command {
             .on("end", () => {
                 interaction.editOriginalMessage(new Embed({ description: "This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button" }).addComponents(null))
             });
+            
+            return null;
         } else {
             const is_cmd = this.client.commands.find(cmd => cmd.name === args.command_or_category.toLowerCase());
             const is_category = this.client.categories.find(category => category.toLowerCase() === args.command_or_category.toLowerCase());
