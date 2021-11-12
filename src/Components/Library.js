@@ -1,6 +1,7 @@
 "use strict";
 
 const SuperAgent = require("superagent");
+
 module.exports = class Library {
     constructor(client) {
         this.client = client;

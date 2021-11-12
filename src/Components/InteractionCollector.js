@@ -1,6 +1,7 @@
 'use strict';
 
 const EventEmitter = require("eventemitter3");
+
 class InteractionHandler extends EventEmitter {
 	constructor(options = {}) {
 		super();

@@ -13,6 +13,6 @@ module.exports = class Ping extends Command {
     }
 
     execute(Interaction) {
-        return Interaction.createFollowup(new Embed({ description: `Pong! \`${Interaction.member ? Interaction.member.guild.shard.latency : "N/A"} ms\`` }).parse());
+        return Interaction.createFollowup(new Embed({ description: `Pong! \`${Interaction.member ? Interaction.member.guild.shard.latency : 'N/A'} ms\`` }).parse());
     }
 }
