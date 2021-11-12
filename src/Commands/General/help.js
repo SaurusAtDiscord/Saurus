@@ -4,7 +4,8 @@ const Command = require("@structures/Command");
 
 const ButtonHelper = require("@components/ComponentHandler");
 const Embed = require("@components/Embed");
-const { collectInteractions } = require("@components/InteractionCollector");
+
+const { awaitInteractions } = require("@components/InteractionCollector");
 
 const { Constants } = require("eris");
 
@@ -39,7 +40,7 @@ module.exports = class Help extends Command {
                 description: `Selectable categories: \`${this.client.categories.join(", ")}\``
             }).addComponents(component.parse()));
 
-            return collectInteractions({
+            return awaitInteractions({
                 client: this.client,
                 interaction,
                 time: 60000,
@@ -62,7 +63,7 @@ module.exports = class Help extends Command {
                 interaction.editOriginalMessage(new Embed({ description: "This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button" }).addComponents(null))
             });
         }
-        
+
         const is_cmd = this.client.commands.find(cmd => cmd.name === args.command_or_category.toLowerCase());
         const is_category = this.client.categories.find(category => category.toLowerCase() === args.command_or_category.toLowerCase());
 

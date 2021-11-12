@@ -24,29 +24,22 @@ class InteractionHandler extends EventEmitter {
 				this.stopListening('maxMatches');
 				return true;
 			}
-
-			return;
 		}
 
 		return false;
 	}
 
-	/**
-     * Stops collecting interactions and removes the listener from the client
-     * @param {string} reason The reason for stopping
-     */
 	stopListening(reason) {
 		if (this.ended) return;
 		this.ended = true;
 
 		if (!this.permanent) this.options.client.removeListener('interactionCreate', this.listener);
-
 		this.emit('end', this.collected, reason);
 	}
 }
 
 module.exports = {
-	collectInteractions: options => {
+	awaitInteractions: options => {
 		return new InteractionHandler(options);
 	}
 }

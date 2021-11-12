@@ -1,6 +1,7 @@
 "use strict";
 
 const Event = require("@structures/Event");
+
 module.exports = class interactionCreate extends Event {
     async execute(Interaction) {
         if (Interaction.constructor.name !== "CommandInteraction") return;
