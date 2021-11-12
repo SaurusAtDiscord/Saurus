@@ -1,14 +1,14 @@
 module.exports = class Embed {
     constructor(obj) {
-        this.embed = [{ embeds: [obj] }];
+        this.embed = { embeds: [obj] };
     }
 
     addComponents(component) {
-        this.embed[0].components = component ?? [];
-        return this.embed[0];
+        this.embed.components = component ?? [];
+        return this.embed;
     }
 
     parse() {
-        return this.embed[0];
+        return this.embed;
     }
 }
