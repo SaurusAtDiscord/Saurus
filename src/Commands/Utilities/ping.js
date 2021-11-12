@@ -10,7 +10,7 @@ module.exports = class Ping extends Command {
         });
     }
 
-    async execute(Interaction) {
-        return Interaction.createFollowup(new Embed({ description: `My ping is \`${Interaction.member ? Interaction.member.guild.shard.latency : "N/A"}\`.` }).parse());
+    execute(Interaction) {
+        return Interaction.createFollowup(new Embed({ description: `Pong! \`${Interaction.member ? Interaction.member.guild.shard.latency : "N/A"} ms\`` }).parse());
     }
 }

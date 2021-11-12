@@ -16,5 +16,5 @@ module.exports = class Command {
         this.options = options.options;
     }
 
-    async execute() {}
+    execute() {}
 }

@@ -9,6 +9,7 @@ module.exports = class SaurusNode extends Client {
         super(key, {
             restMode: true,
             maxShards: "auto",
+            
 			intents: [
 				"guildBans",
 				"guildMembers",

@@ -3,5 +3,5 @@ module.exports = class Event {
         this.client = client;
     }
 
-    async execute() {}
+    execute() {}
 }

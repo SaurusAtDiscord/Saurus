@@ -25,11 +25,11 @@ module.exports = class Help extends Command {
     async execute(interaction, args) {
         if (Object.keys(args).length === 0) {
             const component = new ButtonHelper();
-            let i = [1, 2];
+            const buttonColors = [1, 2];
 
             this.client.categories.forEach(category => {
-                component.createButton(category, i[1], `help.${interaction.member?.id} ${category}`);
-                i.reverse();
+                component.createButton(category, buttonColors[1], `help.${interaction.member?.id} ${category}`);
+                buttonColors.reverse();
             });
             
             interaction.createFollowup(new Embed({
@@ -39,11 +39,11 @@ module.exports = class Help extends Command {
 
             await createMessageButtonCollector.collectInteractions({
                 client: this.client,
-                interaction: interaction,
+                interaction,
                 time: 60000,
                 filter: i => (i.message.channel.id === interaction.channel.id) && (interaction.member?.id === i.data?.custom_id.exportNumbers())
             })
-            .on("collect", async res => {
+            .on("collect", res => {
                 const is_category = this.client.categories.find(category => category.toLowerCase() === res.data.custom_id.split(" ")[1].toLowerCase());
                 
                 const fields = [];
@@ -56,7 +56,7 @@ module.exports = class Help extends Command {
                     fields: fields
                 }).parse());
             })
-            .on("end", async () => {
+            .on("end", () => {
                 interaction.editOriginalMessage(new Embed({ description: "This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button" }).addComponents(null))
             });
         } else {
@@ -80,9 +80,9 @@ module.exports = class Help extends Command {
                         { name: "Usage", value: ("**/**" + is_cmd.usage) ?? "No Example Provided" }
                     ]
                 }).parse());
-            } else {
-                return interaction.createFollowup(new Embed({ description: `\`${args.command_or_category}\` **is not a valid command/category, try once more.**` }).parse());
             }
+
+            return interaction.createFollowup(new Embed({ description: `\`${args.command_or_category}\` **is not a valid command/category, try once more.**` }).parse());
         }
     }
 }
