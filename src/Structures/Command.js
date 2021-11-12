@@ -15,6 +15,4 @@ module.exports = class Command {
 
         this.options = options.options;
     }
-
-    execute() {}
 }

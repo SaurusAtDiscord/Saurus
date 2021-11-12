@@ -2,6 +2,4 @@ module.exports = class Event {
     constructor(client) {
         this.client = client;
     }
-
-    execute() {}
 }
