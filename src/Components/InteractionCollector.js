@@ -45,5 +45,5 @@ class InteractionHandler extends EventEmitter {
 module.exports = {
 	collectInteractions: options => {
 		return new InteractionHandler(options);
-	},
-};
+	}
+}

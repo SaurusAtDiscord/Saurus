@@ -3,6 +3,7 @@ const Event = require("@structures/Event");
 module.exports = class interactionCreate extends Event {
     async execute(Interaction) {
         if (Interaction.constructor.name !== "CommandInteraction") return;
+        
         const command = this.client.commands.find(cmd => cmd.name === Interaction.data.name.toLowerCase());
         if (!command) return;
 

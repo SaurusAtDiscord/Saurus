@@ -28,6 +28,7 @@
   },
   "_moduleAliases": {
     "@structures": "src/Structures",
-    "@components": "src/Components"
+    "@components": "src/Components",
+    "@extensions": "src/Extensions"
   }
 }

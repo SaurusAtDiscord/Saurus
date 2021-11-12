@@ -41,7 +41,7 @@ module.exports = class Help extends Command {
                 client: this.client,
                 interaction,
                 time: 60000,
-                filter: i => (i.message.channel.id === interaction.channel.id) && (interaction.member?.id === i.data?.custom_id.exportNumbers())
+                filter: i => (i.message.channel.id === interaction.channel.id) && (interaction.member?.id === this.client.extensions.string.splitNumbers(i.data?.custom_id))
             })
             .on("collect", res => {
                 const is_category = this.client.categories.find(category => category.toLowerCase() === res.data.custom_id.split(" ")[1].toLowerCase());
@@ -74,7 +74,7 @@ module.exports = class Help extends Command {
                 }).parse());
             } else if (is_cmd) {
                 return interaction.createFollowup(new Embed({
-                    title: `${is_cmd.category} : ${is_cmd.name.upperFirst()}`,
+                    title: `${is_cmd.category} : ${this.client.extensions.string.upperFirst(is_cmd.name)}`,
                     fields: [
                         { name: "Description", value: is_cmd.description ?? "No description provided" },
                         { name: "Usage", value: `**/**${is_cmd.usage}` ?? "No example provided" }

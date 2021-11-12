@@ -37,7 +37,7 @@ module.exports = class Whois extends Command {
                 }
             ],
             thumbnail: { url: (user.avatarURL ?? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`) },
-            color: Interaction.channel?.guild.roles.get(roles[0]?.exportNumbers())?.color
+            color: this.client.extensions.string.splitNumbers(Interaction.channel?.guild.roles.get(roles[0]))?.color
         }).parse());
     }
 }

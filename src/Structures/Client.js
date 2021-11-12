@@ -22,7 +22,10 @@ module.exports = class SaurusNode extends Client {
         this.commands = [ ];
         this.categories = [ ];
         
-        this.library = new (require("@components/Library"))(this);
+        this.extensions = {
+            library: new (require("@components/Library"))(this),
+            string: require("@extensions/String")
+        }
     }
 
     loadCommands(dir) {
@@ -43,10 +46,6 @@ module.exports = class SaurusNode extends Client {
 
     loadMisc() {
         readdirSync("./src/commands/").forEach(dir => this.categories.push(dir));
-
-        // extended functions
-        String.prototype.upperFirst = function() { return this.charAt(0).toUpperCase() + this.slice(1) };
-        String.prototype.exportNumbers = function() { return this.replace(/[^0-9]/g, "") };
     }
 
     Initiate() {
