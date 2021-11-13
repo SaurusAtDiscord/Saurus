@@ -25,7 +25,7 @@ module.exports = class SaurusNode extends Client {
         this.categories = [ ];
         
         this.extensions = {
-            library: new (require('@components/Library'))(this),
+            eris: new (require('@extensions/Eris'))(this),
             string: require('@extensions/String')
         }
     }
