@@ -1,6 +1,9 @@
+// so what if this is the most ugly code I've ever written for functions in my whole life, should I care? no lmao I'll redo this later
+
+/* eslint-disable no-async-promise-executor */
 'use strict';
 
-module.exports = class ErisExtensions {
+module.exports = class Eris {
     constructor(client) {
         this.client = client;
         this.baseURL = 'https://discord.com/api/v9';
@@ -18,25 +21,25 @@ module.exports = class ErisExtensions {
 
     getGuild(guildId) {
         if (!guildId) return;
-        return this.client.guilds.get(guildId) ?? (async function(client) {
-            const restGuild = await client.getRESTGuild(guildId);
-            return restGuild && client.guilds.add(restGuild);
-        })(this.client);
+        return this.client.guilds.get(guildId) ?? new Promise(async () => {
+            const restGuild = await this.client.getRESTGuild(guildId);
+            return restGuild && this.client.guilds.add(restGuild);
+        });
     }
 
     getUser(userId) {
         if (!userId) return;
-        return this.client.users.get(userId) ?? (async function(client) {
-            const restUser = await client.getRESTUser(userId);
-            return restUser && client.users.add(restUser);
-        })(this.client);
+        return this.client.users.get(userId) ?? new Promise(async () => {
+            const restUser = await this.client.getRESTUser(userId);
+            return restUser && this.client.users.add(restUser);
+        });
     }
 
     async getMember(guildId, memberId) {
         if (!guildId || !memberId) return;
-        return (await this.getGuild(guildId)).members.get(memberId) ?? (async function(client) {
-            const restMember = await client.getRESTGuildMember(guildId, memberId);
+        return (await this.getGuild(guildId)).members.get(memberId) ?? new Promise(async () => {
+            const restMember = await this.client.getRESTGuildMember(guildId, memberId);
             return restMember && (await this.getGuild(guildId)).members.add(restMember);
-        })(this.client);
+        });
     }
 }
