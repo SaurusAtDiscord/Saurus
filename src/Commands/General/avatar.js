@@ -22,8 +22,8 @@ module.exports = class Avatar extends Command {
     }   
 
     async execute(Interaction, Args) {
-        const user = (Args.target && await this.client.getRESTUser(Args.target)) ?? (Interaction.member || Interaction.user);
-        
+        const user = (await this.client.extensions.eris.getUser(Args.target)) ?? (Interaction.member || Interaction.user);
+
         return Interaction.createFollowup(new Embed({
             title: `${user.username}#${user.discriminator}'s Avatar`,
             image: { url: user.avatarURL } 
