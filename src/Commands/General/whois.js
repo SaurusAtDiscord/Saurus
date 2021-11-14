@@ -27,7 +27,7 @@ module.exports = class Whois extends Command {
         const roles = user.roles.map(role => user.guild?.roles.get(role)).sort((a, b) => b.position - a.position).map(role => `<@&${role.id}>`);
 
         return Interaction.createFollowup(new Embed({
-            author: { name: `${user.username}#${user.discriminator}`, icon_url: (user.avatarURL ?? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`) },
+            author: { name: `${user.username}#${user.discriminator}`, icon_url: user.avatarURL },
             fields: [
                 {
                     name: 'Guild Details',
@@ -38,7 +38,7 @@ module.exports = class Whois extends Command {
                     value: `• Identity: ${user.username}#${user.discriminator} (\`${user.id}\`)\n• Registered: ${moment(new Date(user.createdAt)).format('LL')} (\`${moment(user.createdAt).fromNow()}\`)`
                 }
             ],
-            thumbnail: { url: (user.avatarURL ?? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`) },
+            thumbnail: { url: user.avatarURL },
             color: roles.length ? user.guild?.roles.get(this.client.extensions.string.splitNumbers(roles[0])).color : null
         }).parse());
     }

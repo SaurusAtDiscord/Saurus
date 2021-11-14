@@ -28,12 +28,7 @@ module.exports = class Help extends Command {
     execute(interaction, args) {
         if (Object.keys(args).length === 0) {
             const component = new ButtonHelper();
-            const buttonColors = [1, 2];
-
-            this.client.categories.forEach(category => {
-                component.createButton(category, buttonColors[1], `help.${interaction.member?.id} ${category}`);
-                buttonColors.reverse();
-            });
+            this.client.categories.forEach(category => component.createButton(category, 2, `help.${interaction.member?.id} ${category}`));
             
             interaction.createFollowup(new Embed({
                 title: 'Help',
@@ -47,9 +42,9 @@ module.exports = class Help extends Command {
                 filter: i => (i.message.channel.id === interaction.channel.id) && (interaction.member?.id === this.client.extensions.string.splitNumbers(i.data?.custom_id))
             })
             .on('collect', res => {
-                const is_category = this.client.categories.find(category => category.toLowerCase() === res.data.custom_id.split(' ')[1].toLowerCase());
-                
                 const fields = [];
+
+                const is_category = this.client.categories.find(category => category.toLowerCase() === res.data.custom_id.split(' ')[1].toLowerCase());
                 this.client.commands.filter(cmd => cmd.category === is_category).forEach(cmd => fields.push({ name: cmd.name, value: cmd.description }));
                 
                 res.acknowledge();
