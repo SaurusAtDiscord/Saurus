@@ -1,5 +1,5 @@
 'use strict';
-//hi
+
 module.exports = class Eris {
     constructor(client) {
         this.client = client;
