@@ -32,7 +32,7 @@ module.exports = class Eris {
         if (user) return user;
 
         const restUser = await this.client.getRESTUser(userId);
-        return restUser && this.client.users.add(restUser);
+        if (restUser) return restUser && this.client.users.add(restUser);
     }
 
     async getMember(guildId, memberId) {
@@ -42,6 +42,6 @@ module.exports = class Eris {
         if (member) return member;
 
         const restMember = await this.client.getRESTGuildMember(guildId, memberId);
-        return restMember && (await this.getGuild(guildId)).members.add(restMember);
+        if (restMember) return restMember && (await this.getGuild(guildId)).members.add(restMember);
     }
 }
