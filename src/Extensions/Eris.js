@@ -15,27 +15,33 @@ module.exports = class Eris {
         else this.client.bulkEditCommands(context);
     }
 
-    getGuild(guildId) {
+    async getGuild(guildId) {
         if (!guildId) return;
-        return this.client.guilds.get(guildId) ?? (new async function() {
-            const restGuild = await this.client.getRESTGuild(guildId);
-            return restGuild && this.client.guilds.add(restGuild);
-        })();
+
+        const guild = this.client.guilds.get(guildId);
+        if (guild) return guild;
+
+        const restGuild = await this.client.getRESTGuild(guildId);
+        if (restGuild) return restGuild && this.client.guilds.add(restGuild);
     }
 
-    getUser(userId) {
+    async getUser(userId) {
         if (!userId) return;
-        return this.client.users.get(userId) ?? (new async function() {
-            const restUser = await this.client.getRESTUser(userId);
-            return restUser && this.client.users.add(restUser);
-        })();
+
+        const user = this.client.users.get(userId);
+        if (user) return user;
+
+        const restUser = await this.client.getRESTUser(userId);
+        return restUser && this.client.users.add(restUser);
     }
 
     async getMember(guildId, memberId) {
         if (!guildId || !memberId) return;
-        return (await this.getGuild(guildId)).members.get(memberId) ?? (new async function() {
-            const restMember = await this.client.getRESTGuildMember(guildId, memberId);
-            return restMember && (await this.getGuild(guildId)).members.add(restMember);
-        })();
+
+        const member = (await this.getGuild(guildId)).members.get(memberId);
+        if (member) return member;
+
+        const restMember = await this.client.getRESTGuildMember(guildId, memberId);
+        return restMember && (await this.getGuild(guildId)).members.add(restMember);
     }
 }
