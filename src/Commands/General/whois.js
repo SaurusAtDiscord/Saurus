@@ -31,7 +31,7 @@ module.exports = class Whois extends Command {
             fields: [
                 {
                     name: 'Guild Details',
-                    value: `• Nickname: ${user.nick ?? 'No Nickname'}\n• Joined at: ${moment(new Date(user.joinedAt)).format('LL')} (\`${moment(user.joinedAt).fromNow()}\`)${roles.length ? '\n• Roles: ' + roles.join(' ') : ''}`
+                    value: `• Nickname: ${user.nick ?? 'No Nickname'}\n• Joined at: ${moment(new Date(user.joinedAt)).format('LL')} (\`${moment(user.joinedAt).fromNow()}\`)${roles.length ? '\n• Roles: ' + roles.join(' ') : ''}` // skipcq JS-0246
                 },
                 {
                     name: 'User Details',
