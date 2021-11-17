@@ -2,16 +2,19 @@
 
 const EventEmitter = require('eventemitter3');
 
-class InteractionHandler extends EventEmitter {
-	constructor(options = {}) {
+module.exports = class InteractionHandler extends EventEmitter {
+	constructor(client, interaction, options = {}) {
 		super();
 
+		this.client = client;
+		this.interaction = interaction;
 		this.options = options;
+
 		this.ended = false;
 		this.collected = [];
 		this.listener = (interaction) => this.checkPreConditions(interaction);
 		
-		this.options.client.on('interactionCreate', this.listener);
+		client.on('interactionCreate', this.listener);
 		if (options.time) setTimeout(() => this.stopListening('time'), options.time);
 	}
 
@@ -33,13 +36,7 @@ class InteractionHandler extends EventEmitter {
 		if (this.ended) return;
 		this.ended = true;
 
-		if (!this.permanent) this.options.client.removeListener('interactionCreate', this.listener);
+		if (!this.permanent) this.client.removeListener('interactionCreate', this.listener);
 		this.emit('end', this.collected, reason);
-	}
-}
-
-module.exports = {
-	awaitInteractions: options => {
-		return new InteractionHandler(options);
 	}
 }

@@ -6,6 +6,8 @@ const { init } = require('@sentry/node');
 const { readdirSync } = require('fs');
 const { join } = require('path');
 
+const InteractionCollector = require('@components/InteractionCollector');
+
 module.exports = class SaurusNode extends Eris.Client {
     constructor(key) {
         super(key, {
@@ -51,7 +53,9 @@ module.exports = class SaurusNode extends Eris.Client {
         Object.defineProperties(Eris.CommandInteraction.prototype, {
             getUser: { value(self) { return _extensions.eris.getUser(self) }},
             getMember: { value(...self) { return _extensions.eris.getMember(...self) }},
-            getGuild: { value(self) { return _extensions.eris.getGuild(self || this.guildID) }}
+            getGuild: { value(self) { return _extensions.eris.getGuild(self || this.guildID) }},
+
+            createMessageComponentCollector: { value(client, ...self) { return new InteractionCollector(client, this, ...self) }}
         });
 
         readdirSync('./src/commands/').forEach(dir => this.categories.push(dir));

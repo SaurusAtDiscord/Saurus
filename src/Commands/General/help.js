@@ -5,7 +5,6 @@ const Command = require('@structures/Command');
 const ButtonHelper = require('@components/ComponentHandler');
 const Embed = require('@components/Embed');
 
-const { awaitInteractions } = require('@components/InteractionCollector');
 const { Constants } = require('eris');
 
 module.exports = class Help extends Command {
@@ -34,9 +33,7 @@ module.exports = class Help extends Command {
                 description: `Selectable categories: \`${this.client.categories.join(', ')}\``
             }).addComponents(component.parse()));
 
-            return awaitInteractions({
-                client: this.client,
-                interaction,
+            return interaction.createMessageComponentCollector(this.client, {
                 time: 120000,
                 filter: i => (i.message.channel.id === interaction.channel.id) && (interaction.member?.id === this.client.extensions.string.splitNumbers(i.data?.custom_id))
             })
