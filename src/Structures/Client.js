@@ -1,12 +1,12 @@
 'use strict';
 
-const { Client } = require('eris');
+const Eris = require('eris');
 
 const { init } = require('@sentry/node');
 const { readdirSync } = require('fs');
 const { join } = require('path');
 
-module.exports = class SaurusNode extends Client {
+module.exports = class SaurusNode extends Eris.Client {
     constructor(key) {
         super(key, {
             restMode: true,
@@ -47,6 +47,13 @@ module.exports = class SaurusNode extends Client {
     }
 
     loadMisc() {
+        const _extensions = this.extensions;
+        Object.defineProperties(Eris.CommandInteraction.prototype, {
+            getUser: { value(self) { return _extensions.eris.getUser(self) }},
+            getMember: { value(...self) { return _extensions.eris.getMember(...self) }},
+            getGuild: { value(self) { return _extensions.eris.getGuild(self || this.guildID) }}
+        });
+
         readdirSync('./src/commands/').forEach(dir => this.categories.push(dir));
     }
 
