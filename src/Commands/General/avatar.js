@@ -21,10 +21,10 @@ module.exports = class Avatar extends Command {
         });
     }   
 
-    async execute(Interaction, Args) {
-        const user = (await this.client.extensions.eris.getUser(Args.target)) ?? (Interaction.member || Interaction.user);
+    async execute(interaction, args) {
+        const user = (await interaction.getUser(args.target)) ?? (interaction.member || interaction.user);
 
-        return Interaction.createFollowup(new Embed({
+        return interaction.createFollowup(new Embed({
             title: `${user.username}#${user.discriminator}'s Avatar`,
             image: { url: user.avatarURL } 
         }).parse());
