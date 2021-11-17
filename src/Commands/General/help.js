@@ -6,7 +6,6 @@ const ButtonHelper = require('@components/ComponentHandler');
 const Embed = require('@components/Embed');
 
 const { awaitInteractions } = require('@components/InteractionCollector');
-
 const { Constants } = require('eris');
 
 module.exports = class Help extends Command {
@@ -38,7 +37,7 @@ module.exports = class Help extends Command {
             return awaitInteractions({
                 client: this.client,
                 interaction,
-                time: 60000,
+                time: 120000,
                 filter: i => (i.message.channel.id === interaction.channel.id) && (interaction.member?.id === this.client.extensions.string.splitNumbers(i.data?.custom_id))
             })
             .on('collect', res => {
@@ -55,7 +54,7 @@ module.exports = class Help extends Command {
                 }).parse());
             })
             .on('end', () => {
-                interaction.editOriginalMessage(new Embed({ description: 'This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button' }).addComponents(null))
+                interaction.editOriginalMessage(new Embed({ description: 'This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button' }).addComponents(null));
             });
         }
 

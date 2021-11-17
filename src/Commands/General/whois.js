@@ -23,7 +23,7 @@ module.exports = class Whois extends Command {
     }   
 
     async execute(interaction, args) {
-        const user = (await interaction.getMember('887396392497184778', args.target)) ?? (interaction.member || interaction.user);
+        const user = (await interaction.getMember(interaction.guildID, args.target)) ?? (interaction.member || interaction.user);
         const roles = user.roles.map(role => user.guild?.roles.get(role)).sort((a, b) => b.position - a.position).map(role => `<@&${role.id}>`);
 
         return interaction.createFollowup(new Embed({
