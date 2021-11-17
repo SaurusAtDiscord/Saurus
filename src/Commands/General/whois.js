@@ -22,11 +22,11 @@ module.exports = class Whois extends Command {
         });
     }   
 
-    async execute(Interaction, Args) {
-        const user = (await this.client.extensions.eris.getMember('887396392497184778', Args.target)) ?? (Interaction.member || Interaction.user);
+    async execute(interaction, args) {
+        const user = (await interaction.getMember('887396392497184778', args.target)) ?? (interaction.member || interaction.user);
         const roles = user.roles.map(role => user.guild?.roles.get(role)).sort((a, b) => b.position - a.position).map(role => `<@&${role.id}>`);
 
-        return Interaction.createFollowup(new Embed({
+        return interaction.createFollowup(new Embed({
             author: { name: `${user.username}#${user.discriminator}`, icon_url: user.avatarURL },
             fields: [
                 {
