@@ -1,10 +1,10 @@
 'use strict';
 
-const Event = require('@structures/Event');
+const Event = require('@core/Event');
 
 module.exports = class ready extends Event {
 	async execute() {
-		const clientCommands = await (process.env.NODE_ENV === 'development' ? this.client.getGuildCommands('887396392497184778') : this.client.getCommands());
+		const clientCommands = await (process.env.NODE_ENV === 'development' ? this.client.getGuildCommands('671691366102990848') : this.client.getCommands());
 
 		//const newCommands = this.client.commands.filter(command => !clientCommands.some(cmd => cmd.name === command.name));
 		const deletedCommands = clientCommands.filter(command => !this.client.commands.find(cmd => cmd.name === command.name));

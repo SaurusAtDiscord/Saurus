@@ -5,7 +5,7 @@ const EventEmitter = require('eventemitter3');
 module.exports = class InteractionHandler extends EventEmitter {
 	constructor(client, interaction, options = {}) {
 		super();
-
+		
 		this.client = client;
 		this.interaction = interaction;
 		this.options = options;

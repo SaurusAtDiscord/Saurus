@@ -6,21 +6,21 @@ const { init } = require('@sentry/node');
 const { readdirSync } = require('fs');
 const { join } = require('path');
 
-const InteractionCollector = require('@components/InteractionCollector');
+const InteractionCollector = require('@units/InteractionCollector');
 
 module.exports = class SaurusNode extends Eris.Client {
     constructor(key) {
         super(key, {
             restMode: true,
             maxShards: 'auto',
-            
 			intents: [
 				'guildBans',
 				'guildMembers',
 				'guildMessageReactions',
 				'guildMessages',
 				'guilds'
-			]
+			],
+            disableEvents: { TYPING_START: true }
         });
         
         this.commands = [ ];
@@ -61,9 +61,9 @@ module.exports = class SaurusNode extends Eris.Client {
         readdirSync('./src/commands/').forEach(dir => this.categories.push(dir));
     }
 
-    Initiate() {
-        this.loadCommands(join(__dirname, '../Commands'));
-        this.loadEvents(join(__dirname, '../Events'));
+    initiate() {
+        this.loadCommands(join(__dirname, '../commands'));
+        this.loadEvents(join(__dirname, '../events'));
         this.loadMisc();
 
         init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV, attachStacktrace: true });

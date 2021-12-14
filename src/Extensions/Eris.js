@@ -6,12 +6,12 @@ module.exports = class Eris {
     }
 
     deleteCommand(commandId) {
-        if (process.env.NODE_ENV === 'development') this.client.deleteGuildCommand('887396392497184778', commandId)
+        if (process.env.NODE_ENV === 'development') this.client.deleteGuildCommand('671691366102990848', commandId)
         else this.client.deleteCommand(commandId);
     }
 
     createCommand(context) {
-        if (process.env.NODE_ENV === 'development') this.client.bulkEditGuildCommands('887396392497184778', context)
+        if (process.env.NODE_ENV === 'development') this.client.bulkEditGuildCommands('671691366102990848', context)
         else this.client.bulkEditCommands(context);
     }
 

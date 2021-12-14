@@ -1,7 +1,7 @@
 'use strict';
 
-const Command = require('@structures/Command');
-const Embed = require('@components/Embed');
+const Command = require('@core/Command');
+const Embed = require('@units/Embed');
 
 const { Constants } = require('eris');
 const moment = require('moment');
@@ -40,6 +40,6 @@ module.exports = class Whois extends Command {
             ],
             thumbnail: { url: user.avatarURL },
             color: roles.length ? user.guild?.roles.get(this.client.extensions.string.splitNumbers(roles[0])).color : null
-        }).parse());
+        }));
     }
 }

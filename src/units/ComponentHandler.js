@@ -2,7 +2,7 @@
 
 const { Constants } = require('eris');
 
-module.exports = class ButtonHelper {
+module.exports = class ButtonHelper { // Credit to Spencer0003.
     constructor(maxRows) {
         this.maxRows = maxRows ?? 5;
         this.rows = [];
@@ -20,19 +20,24 @@ module.exports = class ButtonHelper {
         this.rows.filter(row => row.components.length === 0).forEach(row => this.rows.splice(this.rows.indexOf(row), 1));
     }
 
+    updateAndDisable(custom_id) {
+        this.rows.forEach(row => row.components.forEach(component => component.disabled = component.custom_id === custom_id ? true : false));
+    }
+
     parse() {
         this._removeEmptyRows();
         return this.rows;
     }
 
-    createButton(label, style, custom_id, disabled) {    
+    createButton(label, style, custom_id, emoji, disabled = false) {    
         this._addRowIfRequired();
         this.rows[this.rows.length - 1].components.push({
             type: Constants.ComponentTypes.BUTTON,
             label,
             style,
             custom_id,
-            disabled: disabled ?? false
+            emoji,
+            disabled
         });
     }
 }
