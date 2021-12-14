@@ -27,6 +27,8 @@ module.exports = class Eris {
     }
 
     async getUser(userId) {
+        if (!userId) return;
+        
         let user = this.client.users.get(userId);
         if (user) return user;
       

@@ -7,12 +7,11 @@ module.exports = class InteractionHandler extends EventEmitter {
 		super();
 		
 		this.client = client;
-		this.interaction = interaction;
 		this.options = options;
 
 		this.ended = false;
 		this.collected = [];
-		this.listener = (interaction) => this.checkPreConditions(interaction);
+		this.listener = interaction => this.checkPreConditions(interaction);
 		
 		client.on('interactionCreate', this.listener);
 		if (options.time) setTimeout(() => this.stopListening('time'), options.time);

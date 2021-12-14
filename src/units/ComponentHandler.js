@@ -2,7 +2,7 @@
 
 const { Constants } = require('eris');
 
-module.exports = class ButtonHelper { // Credit to Spencer0003.
+module.exports = class ButtonHelper { // Credit to Spencer0003 and DonovanDMC
     constructor(maxRows) {
         this.maxRows = maxRows ?? 5;
         this.rows = [];
@@ -21,7 +21,7 @@ module.exports = class ButtonHelper { // Credit to Spencer0003.
     }
 
     updateAndDisable(custom_id) {
-        this.rows.forEach(row => row.components.forEach(component => component.disabled = (component.custom_id === custom_id)));
+        this.rows.forEach(row => row.components.forEach(component => component.disabled = component.custom_id === custom_id));
     }
 
     parse() {
