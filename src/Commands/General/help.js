@@ -34,7 +34,7 @@ module.exports = class Help extends Command {
             }, component.parse()));
             
             return interaction.createMessageComponentCollector(this.client, {
-                time: 120000,
+                time: 30000,
                 filter: i => (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
             })
             .on('collect', async res => {
@@ -51,7 +51,7 @@ module.exports = class Help extends Command {
                 }, component.parse()));
             })
             .on('end', () => {
-                interaction.editOriginalMessage(new Embed({ description: 'This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button' }, null));
+                interaction.editOriginalMessage(new Embed({ description: 'This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button' }, []));
             });
         }
 
