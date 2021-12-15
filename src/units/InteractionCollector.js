@@ -2,15 +2,15 @@
 
 const EventEmitter = require('eventemitter3');
 
-module.exports = class InteractionHandler extends EventEmitter {
-	constructor(client, options = {}) {
+module.exports = class createMessageComponentCollector extends EventEmitter {
+	constructor(client, options) {
 		super();
 		
 		this.client = client;
 		this.options = options;
 
 		this.ended = false;
-		this.collected = [];
+		this.collected = 0;
 		this.listener = this.checkPreConditions.bind(this);
 		
 		client.on('interactionCreate', this.listener);
@@ -20,9 +20,9 @@ module.exports = class InteractionHandler extends EventEmitter {
 	checkPreConditions(interaction) {
 		if (this.options.filter(interaction)) {
 			this.emit('collect', interaction);
-			this.collected.push({ interaction });
+			this.collected++;
 
-			if (this.collected.length >= this.options.maxMatches) {
+			if (this.options.maxMatches && this.collected >= this.options.maxMatches) {
 				this.stopListening('maxMatches');
 				return true;
 			}
