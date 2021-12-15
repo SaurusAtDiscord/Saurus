@@ -17,34 +17,19 @@ module.exports = class Eris {
 
     async getGuild(guildId) {
         if (!guildId) return;
-
-        let guild = this.client.guilds.get(guildId);
-        if (guild) return guild;
-      
-        guild = await this.client.getRESTGuild(guildId);
-        this.client.guilds.add(guild);
-        return guild;
+        return this.client.guilds.get(guildId) ?? this.client.guilds.add(await this.client.getRESTGuild(guildId));
     }
 
     async getUser(userId) {
         if (!userId) return;
-        
-        let user = this.client.users.get(userId);
-        if (user) return user;
-      
-        user = await this.client.getRESTUser(userId);
-        this.client.users.add(user);
-        return user;
+        return this.client.users.get(userId) ?? this.client.users.add(await this.client.getRESTUser(userId));
     }
 
     async getMember(guildId, memberId) {
         if (!guildId || !memberId) return;
+        const guild = await this.getGuild(guildId);
+        if (!guild) return;
 
-        let member = (await this.getGuild(guildId)).members.get(memberId);
-        if (member) return member;
-
-        member = await this.client.getRESTGuildMember(guildId, memberId);
-        (await this.getGuild(guildId)).members.add(member);
-        return member;
+        return guild.members.get(memberId) ?? guild.members.add(await this.client.getRESTGuildMember(guildId, memberId));
     }
 }
