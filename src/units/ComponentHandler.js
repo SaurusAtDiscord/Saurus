@@ -21,7 +21,7 @@ module.exports = class ButtonHelper { // Credit to Spencer0003 and DonovanDMC
     }
 
     updateAndDisable(custom_id) {
-        this.rows.forEach(row => row.components.forEach(component => component.disabled = component.custom_id === custom_id));
+        this.rows.forEach(row => row.components.forEach(component => { component.disabled = component.custom_id === custom_id }));
     }
 
     parse() {

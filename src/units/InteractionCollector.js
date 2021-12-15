@@ -3,7 +3,7 @@
 const EventEmitter = require('eventemitter3');
 
 module.exports = class InteractionHandler extends EventEmitter {
-	constructor(client, interaction, options = {}) {
+	constructor(client, options = {}) {
 		super();
 		
 		this.client = client;
@@ -11,7 +11,7 @@ module.exports = class InteractionHandler extends EventEmitter {
 
 		this.ended = false;
 		this.collected = [];
-		this.listener = interaction => this.checkPreConditions(interaction);
+		this.listener = this.checkPreConditions.bind(this);
 		
 		client.on('interactionCreate', this.listener);
 		if (options.time) setTimeout(() => this.stopListening('time'), options.time);
@@ -21,7 +21,7 @@ module.exports = class InteractionHandler extends EventEmitter {
 		if (this.options.filter(interaction)) {
 			this.emit('collect', interaction);
 			this.collected.push({ interaction });
-			
+
 			if (this.collected.length >= this.options.maxMatches) {
 				this.stopListening('maxMatches');
 				return true;
