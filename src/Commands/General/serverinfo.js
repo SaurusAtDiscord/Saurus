@@ -42,6 +42,6 @@ module.exports = class Serverinfo extends Command {
                     value: `• Roles: ${roles.join(' ')} \n• Text Channels: ${guild.channels.filter(channel => channel.type === Constants.ChannelTypes.GUILD_TEXT).length} \n• Voice Channels: ${guild.channels.filter(channel => channel.type === Constants.ChannelTypes.GUILD_VOICE).length} \n• Boosts Count: ${guild.premiumSubscriptionCount || '0'}`
                 }
 			]
-        }));
+        }).load());
     }
 }

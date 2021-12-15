@@ -27,6 +27,6 @@ module.exports = class Avatar extends Command {
         return interaction.createFollowup(new Embed({
             title: `${user.username}#${user.discriminator}'s Avatar`,
             image: { url: user.avatarURL } 
-        }));
+        }).load());
     }
 }

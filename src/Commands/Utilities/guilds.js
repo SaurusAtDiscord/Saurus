@@ -13,6 +13,6 @@ module.exports = class Guilds extends Command {
     }
 
     execute(interaction) {
-        return interaction.createFollowup(new Embed({ description: `I'm in \`${this.client.guilds.size ?? 'NaN'}\` guild(s) :partying_face:` }));
+        return interaction.createFollowup(new Embed({ description: `I'm in \`${this.client.guilds.size ?? 'NaN'}\` guild(s) :partying_face:` }).load());
     }
 }

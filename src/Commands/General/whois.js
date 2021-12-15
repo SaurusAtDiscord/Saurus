@@ -40,6 +40,6 @@ module.exports = class Whois extends Command {
             ],
             thumbnail: { url: user.avatarURL },
             color: roles.length ? user.guild?.roles.get(this.client.extensions.string.splitNumbers(roles[0])).color : null
-        }));
+        }).load());
     }
 }

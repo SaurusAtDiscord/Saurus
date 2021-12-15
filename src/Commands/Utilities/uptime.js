@@ -15,6 +15,6 @@ module.exports = class Uptime extends Command {
     }
 
     execute(interaction) {
-        return interaction.createFollowup(new Embed({ description: `\`${prettyMS(this.client.uptime, { verbose: true })}\`` }));
+        return interaction.createFollowup(new Embed({ description: `\`${prettyMS(this.client.uptime, { verbose: true })}\`` }).load());
     }
 }

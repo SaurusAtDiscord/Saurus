@@ -34,10 +34,10 @@ module.exports = class Help extends Command {
             interaction.createFollowup(new Embed({
                 title: 'Help',
                 description: `You can observe available categories by clicking the buttons below.`
-            }, component.parse()));
+            }).addComponent(component.parse()));
             
             return interaction.createMessageComponentCollector(this.client, {
-                time: 30000,
+                time: 60000,
                 filter: i => (i.data.custom_id.split(' ')[0] === uniId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
             })
             .on('collect', async res => {
@@ -51,10 +51,10 @@ module.exports = class Help extends Command {
                     title: is_category,
                     description: `This category consists of ${fields.length} commands.`,
                     fields
-                }, component.parse()));
+                }).addComponent(component.parse()));
             })
             .on('end', () => {
-                interaction.editOriginalMessage(new Embed({ description: 'This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button' }, []));
+                interaction.editOriginalMessage(new Embed({ description: 'This embed has been timed-out.\nSuggestion: Press the `Dismiss Message` button' }).addComponent());
             });
         }
 
@@ -67,7 +67,7 @@ module.exports = class Help extends Command {
                 title: is_category,
                 description: `This category consists of ${fields.length} commands.`,
                 fields
-            }));
+            }).load());
         } else if (is_cmd) {
             return interaction.createFollowup(new Embed({
                 title: `${is_cmd.category} : ${this.client.extensions.string.upperFirst(is_cmd.name)}`,
@@ -75,9 +75,9 @@ module.exports = class Help extends Command {
                     { name: 'Description', value: is_cmd.description ?? 'No description provided' },
                     { name: 'Usage', value: `**/**${is_cmd.usage}` ?? 'No example provided' }
                 ]
-            }));
+            }).load());
         }
 
-        return interaction.createFollowup(new Embed({ description: `\`${args.command_or_category}\` **is not a valid command/category, try once more.**` }));
+        return interaction.createFollowup(new Embed({ description: `\`${args.command_or_category}\` **is not a valid command/category, try once more.**` }).load());
     }
 }

@@ -16,7 +16,7 @@ module.exports = class interactionCreate extends Event {
                 if (command.userPermissions) {
                     const perms = interaction.channel.permissionsOf(this.client.user.id);
                     const missingUserPerms = command.userPermissions.filter(perm => !perms.has(perm));
-                    return interaction.createFollowup(new Embed({ description: missingUserPerms }));
+                    return interaction.createFollowup(new Embed({ description: missingUserPerms }).load());
                 }
         
                 const args = {};

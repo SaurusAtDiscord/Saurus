@@ -17,6 +17,6 @@ module.exports = class Membercount extends Command {
         return interaction.createFollowup(new Embed({ fields: [
             { name: 'Members', value: await guild.fetchAllMembers(), inline: true },
             { name: 'Bots', value: guild.members.filter(m => m.bot).length, inline: true }
-        ]}));
+        ]}).load());
     }
 }
