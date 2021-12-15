@@ -6,6 +6,7 @@ const ButtonHelper = require('@units/ComponentHandler');
 const Embed = require('@units/Embed');
 
 const { Constants } = require('eris');
+const _ = require('underscore');
 
 module.exports = class Help extends Command {
     constructor(client) {
@@ -26,7 +27,9 @@ module.exports = class Help extends Command {
     execute(interaction, args) {
         if (Object.keys(args).length === 0) {
             const component = new ButtonHelper();
-            this.client.categories.forEach(category => component.createButton(category, 2, `help ${interaction.member.id} ${category} ${interaction.channel.id}`));
+            const uniId = _.uniqueId('help_@');
+
+            this.client.categories.forEach(category => component.createButton(category, 2, `${uniId} ${interaction.member.id} ${category}`));
             
             interaction.createFollowup(new Embed({
                 title: 'Help',
@@ -35,7 +38,7 @@ module.exports = class Help extends Command {
             
             return interaction.createMessageComponentCollector(this.client, {
                 time: 30000,
-                filter: i => (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
+                filter: i => (i.data.custom_id.split(' ')[0] === uniId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
             })
             .on('collect', async res => {
                 await res.acknowledge();
