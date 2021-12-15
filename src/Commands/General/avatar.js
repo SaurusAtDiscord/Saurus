@@ -1,8 +1,6 @@
 'use strict';
 
 const Command = require('@core/Command');
-const Embed = require('@units/Embed');
-
 const { Constants } = require('eris');
 
 module.exports = class Avatar extends Command {
@@ -24,9 +22,9 @@ module.exports = class Avatar extends Command {
     async execute(interaction, args) {
         const user = (args.target && await interaction.getMember(interaction.guildID, args.target)) ?? interaction.member;
 
-        return interaction.createFollowup(new Embed({
+        return interaction.createFollowup({ embed: {
             title: `${user.username}#${user.discriminator}'s Avatar`,
             image: { url: user.avatarURL } 
-        }).load());
+        }});
     }
 }

@@ -1,7 +1,6 @@
 'use strict';
 
 const Command = require('@core/Command');
-const Embed = require('@units/Embed');
 
 module.exports = class Membercount extends Command {
     constructor(client) {
@@ -14,9 +13,9 @@ module.exports = class Membercount extends Command {
 
     async execute(interaction) {
         const guild = await interaction.getGuild();
-        return interaction.createFollowup(new Embed({ fields: [
+        return interaction.createFollowup({ embed: { fields: [
             { name: 'Members', value: await guild.fetchAllMembers(), inline: true },
             { name: 'Bots', value: guild.members.filter(m => m.bot).length, inline: true }
-        ]}).load());
+        ]}});
     }
 }

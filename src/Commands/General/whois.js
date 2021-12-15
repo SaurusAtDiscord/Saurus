@@ -1,8 +1,6 @@
 'use strict';
 
 const Command = require('@core/Command');
-const Embed = require('@units/Embed');
-
 const { Constants } = require('eris');
 const moment = require('moment');
 
@@ -26,7 +24,7 @@ module.exports = class Whois extends Command {
         const user = (args.target && await interaction.getMember(interaction.guildID, args.target)) ?? interaction.member;
         const roles = user.roles.map(role => user.guild?.roles.get(role)).sort((a, b) => b.position - a.position).map(role => `<@&${role.id}>`);
 
-        return interaction.createFollowup(new Embed({
+        return interaction.createFollowup({ embed: {
             author: { name: `${user.username}#${user.discriminator}`, icon_url: user.avatarURL },
             fields: [
                 {
@@ -40,6 +38,6 @@ module.exports = class Whois extends Command {
             ],
             thumbnail: { url: user.avatarURL },
             color: roles.length ? user.guild?.roles.get(this.client.extensions.string.splitNumbers(roles[0])).color : null
-        }).load());
+        }});
     }
 }

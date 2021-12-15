@@ -1,8 +1,6 @@
 'use strict';
 
 const Event = require('@core/Event');
-//const Embed = require('@units/Embed');
-
 const { Constants } = require('eris');
 
 module.exports = class interactionCreate extends Event {
@@ -15,7 +13,7 @@ module.exports = class interactionCreate extends Event {
         // if (command.userPermissions) {
         //     const perms = interaction.channel.permissionsOf(this.client.user.id);
         //     const missingUserPerms = command.userPermissions.filter(perm => !perms.has(perm));
-        //     return interaction.createFollowup(new Embed({ description: missingUserPerms }).load());
+        //     return interaction.createFollowup({ embed: { description: missingUserPerms }});
         // }
 
         const args = {};

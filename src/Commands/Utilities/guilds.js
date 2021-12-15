@@ -1,7 +1,6 @@
 'use strict';
 
 const Command = require('@core/Command');
-const Embed = require('@units/Embed');
 
 module.exports = class Guilds extends Command {
     constructor(client) {
@@ -13,6 +12,6 @@ module.exports = class Guilds extends Command {
     }
 
     execute(interaction) {
-        return interaction.createFollowup(new Embed({ description: `I'm in \`${this.client.guilds.size ?? 'NaN'}\` guild(s) :partying_face:` }).load());
+        return interaction.createFollowup({ embed: { description: `I'm in \`${this.client.guilds.size ?? 'NaN'}\` guild(s) :partying_face:` }});
     }
 }

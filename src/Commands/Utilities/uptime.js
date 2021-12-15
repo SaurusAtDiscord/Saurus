@@ -1,8 +1,6 @@
 'use strict';
 
 const Command = require('@core/Command');
-const Embed = require('@units/Embed');
-
 const prettyMS = require('pretty-ms');
 
 module.exports = class Uptime extends Command {
@@ -15,6 +13,6 @@ module.exports = class Uptime extends Command {
     }
 
     execute(interaction) {
-        return interaction.createFollowup(new Embed({ description: `\`${prettyMS(this.client.uptime, { verbose: true })}\`` }).load());
+        return interaction.createFollowup({ embed: { description: `\`${prettyMS(this.client.uptime, { verbose: true })}\`` }});
     }
 }

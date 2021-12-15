@@ -1,7 +1,6 @@
 'use strict';
 
 const Command = require('@core/Command');
-const Embed = require('@units/Embed');
 
 module.exports = class Ping extends Command {
     constructor(client) {
@@ -13,6 +12,6 @@ module.exports = class Ping extends Command {
     }
 
     execute(interaction) {
-        return interaction.createFollowup(new Embed({ description: `Pong! \`${interaction.member ? interaction.member.guild.shard.latency : 'NaN'} ms\`` }).load());
+        return interaction.createFollowup({ embed: { description: `Pong! \`${interaction.member ? interaction.member.guild.shard.latency : 'NaN'} ms\`` }});
     }
 }
