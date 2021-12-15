@@ -55,7 +55,7 @@ module.exports = class SaurusNode extends Eris.Client {
             getMember: { value(...self) { return _extensions.eris.getMember(...self) }},
             getGuild: { value(self) { return _extensions.eris.getGuild(self || this.guildID) }},
 
-            createMessageComponentCollector: { value(client, ...self) { return new InteractionCollector(client, this, ...self) }}
+            createMessageComponentCollector: { value(client, ...self) { return new InteractionCollector(client, ...self) }}
         });
 
         readdirSync('./src/commands/').forEach(dir => this.categories.push(dir));
