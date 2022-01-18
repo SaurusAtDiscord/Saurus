@@ -7,7 +7,6 @@ module.exports = class Command {
         this.name = options.name;
         this.description = options.description;
         this.category = options.category;
-        this.usage = options.usage;
 
         this.userPermissions = options.userPermissions; 
         this.clientPermissions = options.clientPermissions;

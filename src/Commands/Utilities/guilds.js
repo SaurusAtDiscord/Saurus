@@ -6,8 +6,7 @@ module.exports = class Guilds extends Command {
     constructor(client) {
         super(client, {
             name: 'guilds',
-            description: 'Tells the amount of servers Saurus is in',
-            category: 'Utilities'
+            description: 'Tells the amount of servers Saurus is in'
         });
     }
 

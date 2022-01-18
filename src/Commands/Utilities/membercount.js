@@ -6,8 +6,7 @@ module.exports = class Membercount extends Command {
     constructor(client) {
         super(client, {
             name: 'membercount',
-            description: 'Statistics of the amount of members & bots',
-            category: 'Utilities'
+            description: 'Statistics of the amount of members & bots'
         });
     }
 

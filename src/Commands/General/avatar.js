@@ -8,11 +8,9 @@ module.exports = class Avatar extends Command {
         super(client, {
             name: 'avatar',
             description: 'Get a users avatar',
-            usage: 'avatar (user)',
-            category: 'General',
             
             options: [{
-                'name': 'target',
+                'name': 'user',
                 'description': 'Fetch this users avatar',
                 'type': Constants.ApplicationCommandOptionTypes.USER
             }]
@@ -20,7 +18,7 @@ module.exports = class Avatar extends Command {
     }   
 
     async execute(interaction, args) {
-        const user = (args.target && await interaction.getMember(interaction.guildID, args.target)) ?? interaction.member;
+        const user = (args.user && await interaction.getMember(interaction.guildID, args.user)) ?? interaction.member;
 
         return interaction.createFollowup({ embed: {
             title: `${user.username}#${user.discriminator}'s Avatar`,

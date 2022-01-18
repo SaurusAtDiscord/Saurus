@@ -35,7 +35,7 @@ module.exports = class createMessageComponentCollector extends EventEmitter {
 		if (this.ended) return;
 		this.ended = true;
 
-		if (!this.permanent) this.client.removeListener('interactionCreate', this.listener);
+		this.client.removeListener('interactionCreate', this.listener);
 		this.emit('end', this.collected, reason);
 	}
 }

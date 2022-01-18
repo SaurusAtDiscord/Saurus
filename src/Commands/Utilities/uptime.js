@@ -7,8 +7,7 @@ module.exports = class Uptime extends Command {
     constructor(client) {
         super(client, {
             name: 'uptime',
-            description: 'Tells the amount of time Saurus has been awake for',
-            category: 'Utilities'
+            description: 'Tells the amount of time Saurus has been awake for'
         });
     }
 

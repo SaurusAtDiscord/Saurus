@@ -6,8 +6,7 @@ module.exports = class Ping extends Command {
     constructor(client) {
         super(client, {
             name: 'ping',
-            description: 'Informs you of my ping',
-            category: 'Utilities'
+            description: 'Informs you of my ping'
         });
     }
 

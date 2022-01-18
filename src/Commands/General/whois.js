@@ -9,11 +9,9 @@ module.exports = class Whois extends Command {
         super(client, {
             name: 'whois',
             description: 'Gives information about the provided user',
-            usage: 'whois (user)',
-            category: 'General',
             
             options: [{
-                'name': 'target',
+                'name': 'user',
                 'description': 'Get information on a specific user',
                 'type': Constants.ApplicationCommandOptionTypes.USER
             }]
@@ -21,8 +19,8 @@ module.exports = class Whois extends Command {
     }   
 
     async execute(interaction, args) {
-        const user = (args.target && await interaction.getMember(interaction.guildID, args.target)) ?? interaction.member;
-        const roles = user.roles.map(role => user.guild?.roles.get(role)).sort((a, b) => b.position - a.position).map(role => `<@&${role.id}>`);
+        const user = (args.user && await interaction.getMember(interaction.guildID, args.user)) ?? interaction.member;
+        const roles = user.roles.map(role => user.guild.roles.get(role)).sort((a, b) => b.position - a.position).map(role => `<@&${role.id}>`);
 
         return interaction.createFollowup({ embed: {
             author: { name: `${user.username}#${user.discriminator}`, icon_url: user.avatarURL },
@@ -37,7 +35,7 @@ module.exports = class Whois extends Command {
                 }
             ],
             thumbnail: { url: user.avatarURL },
-            color: roles.length ? user.guild?.roles.get(this.client.extensions.string.splitNumbers(roles[0])).color : null
+            color: roles.length ? user.guild.roles.get(this.client.extensions.string.splitNumbers(roles[0])).color : null
         }});
     }
 }

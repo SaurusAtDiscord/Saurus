@@ -3,8 +3,8 @@
 const { Constants } = require('eris');
 
 module.exports = class ButtonHelper { // Credit to Spencer0003 and DonovanDMC
-    constructor(maxRows) {
-        this.maxRows = maxRows ?? 5;
+    constructor(maxRows = 5) {
+        this.maxRows = maxRows;
         this.rows = [];
     }
 
@@ -20,8 +20,8 @@ module.exports = class ButtonHelper { // Credit to Spencer0003 and DonovanDMC
         this.rows.filter(row => row.components.length === 0).forEach(row => this.rows.splice(this.rows.indexOf(row), 1));
     }
 
-    updateAndDisable(custom_id) {
-        this.rows.forEach(row => row.components.forEach(component => { component.disabled = component.custom_id === custom_id }));
+    disable(input) {
+        this.rows.forEach(row => row.components.forEach(component => { component.disabled = (input === 'all' || component.custom_id === input) }));
     }
 
     parse() {

@@ -8,8 +8,7 @@ module.exports = class Serverinfo extends Command {
     constructor(client) {
         super(client, {
             name: 'serverinfo',
-            description: 'Displays information about the server',
-            category: 'General'
+            description: 'Displays information about the server'
         });
     }
 
@@ -21,10 +20,10 @@ module.exports = class Serverinfo extends Command {
         return interaction.createFollowup({ embed: {
             author: {
 				name: guild.name,
-				icon_url: guild.iconURL ?? null
+				icon_url: guild.iconURL
 			},
 
-			thumbnail: { url: guild.iconURL ?? null },
+			thumbnail: { url: guild.iconURL },
 
 			fields: [
                 {
