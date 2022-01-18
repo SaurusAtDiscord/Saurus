@@ -19,7 +19,7 @@ module.exports = class Whois extends Command {
     }   
 
     async execute(interaction, args) {
-        const user = (args.user && await interaction.getMember(interaction.guildID, args.user)) ?? interaction.member;
+        const user = (args.user && await this.client.utils.getMember(interaction.guildID, args.user)) ?? interaction.member;
         const roles = user.roles.map(role => user.guild.roles.get(role)).sort((a, b) => b.position - a.position).map(role => `<@&${role.id}>`);
 
         return interaction.createFollowup({ embed: {
@@ -35,7 +35,7 @@ module.exports = class Whois extends Command {
                 }
             ],
             thumbnail: { url: user.avatarURL },
-            color: roles.length ? user.guild.roles.get(this.client.extensions.string.splitNumbers(roles[0])).color : null
+            color: roles.length ?? user.guild.roles.get(this.client.stringUtils.splitNumbers(roles[0])).color
         }});
     }
 }

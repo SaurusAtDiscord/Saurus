@@ -21,13 +21,11 @@ module.exports = class SaurusNode extends Eris.Client {
             disableEvents: { TYPING_START: true }
         });
         
-        this.commands = [ ];
-        this.categories = [ ];
+        this.commands = [ ]
+        this.categories = [ ]
         
-        this.extensions = {
-            eris: new (require('@extensions/Eris'))(this),
-            string: require('@extensions/String')
-        }
+        this.utils = new (require('@extensions/Eris'))(this);
+        this.stringUtils = require('@extensions/String');
     }
 
     loadCommands(dir) {
@@ -48,21 +46,11 @@ module.exports = class SaurusNode extends Eris.Client {
         });
     }
 
-    loadMisc() {
-        const _extensions = this.extensions;
-        Object.defineProperties(Eris.CommandInteraction.prototype, {
-            getUser: { value(self) { return _extensions.eris.getUser(self) }},
-            getMember: { value(...self) { return _extensions.eris.getMember(...self) }},
-            getGuild: { value(self) { return _extensions.eris.getGuild(self || this.guild) }}
-        });
-    }
-
     initiate() {
         this.loadCommands(join(__dirname, '../commands'));
         this.loadEvents(join(__dirname, '../events'));
-        this.loadMisc();
 
         init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV, attachStacktrace: true });
-        this.connect();
+        void this.connect();
     }
 }

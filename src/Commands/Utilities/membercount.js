@@ -11,7 +11,7 @@ module.exports = class Membercount extends Command {
     }
 
     async execute(interaction) {
-        const guild = await interaction.getGuild();
+        const guild = await this.client.utils.getGuild();
         return interaction.createFollowup({ embed: { fields: [
             { name: 'Members', value: await guild.fetchAllMembers(), inline: true },
             { name: 'Bots', value: guild.members.filter(m => m.bot).length, inline: true }

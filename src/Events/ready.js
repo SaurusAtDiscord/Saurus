@@ -8,9 +8,9 @@ module.exports = class ready extends Event {
 
 		//const newCommands = this.client.commands.filter(command => !clientCommands.some(cmd => cmd.name === command.name));
 		const deletedCommands = clientCommands.filter(command => !this.client.commands.find(cmd => cmd.name === command.name));
-		if (deletedCommands.length) deletedCommands.forEach(cmd => this.client.extensions.eris.deleteCommand(cmd.id));
+		if (deletedCommands.length) deletedCommands.forEach(cmd => this.client.utils.deleteCommand(cmd.id));
 
 		//console.log(newCommands);
-		this.client.extensions.eris.createCommand(this.client.commands);
+		this.client.utils.createCommand(this.client.commands);
 	}
 }

@@ -25,6 +25,6 @@ module.exports = class Eris {
 
     async getMember(guildId, memberId) {
         const guild = await this.getGuild(guildId);
-        return guild.members.get(memberId) ?? guild.members.add(await this.client.getRESTGuildMember(guildId, memberId));
+        return guild && (guild.members.get(memberId) ?? guild.members.add(await this.client.getRESTGuildMember(guildId, memberId)));
     }
 }
