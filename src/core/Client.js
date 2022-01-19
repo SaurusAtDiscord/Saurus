@@ -20,7 +20,7 @@ module.exports = class SaurusNode extends Eris.Client {
 			],
             disableEvents: { TYPING_START: true }
         });
-        
+         
         this.commands = [ ]
         this.categories = [ ]
         
@@ -28,6 +28,11 @@ module.exports = class SaurusNode extends Eris.Client {
         this.stringUtils = require('@extensions/String');
     }
 
+    /**
+     * Loads all the commands in the commands directory.
+     * @param { String } dir The directory to load commands from.
+     * @returns { null }
+     */
     loadCommands(dir) {
         readdirSync(dir)
         .forEach(f => {
@@ -37,6 +42,11 @@ module.exports = class SaurusNode extends Eris.Client {
         });
     }
 
+    /**
+     * Load all the JavaScript files in the `events` directory and execute them.
+     * @param { String } dir - The directory to load events from.
+     * @returns { null }
+     */
     loadEvents(dir) {        
         readdirSync(dir).filter(file => file.endsWith('.js'))
         .forEach(ev => {
@@ -46,11 +56,15 @@ module.exports = class SaurusNode extends Eris.Client {
         });
     }
 
+    /**
+     * Loads the commands and events from the commands and events directories and then connects to the Discord API.
+    * @returns { null }
+    */
     initiate() {
         this.loadCommands(join(__dirname, '../commands'));
         this.loadEvents(join(__dirname, '../events'));
 
         init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV, attachStacktrace: true });
-        void this.connect();
+        this.connect();
     }
 }
