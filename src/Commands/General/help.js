@@ -76,11 +76,13 @@ module.exports = class Help extends Command {
         } else if (is_cmd) {
             let usage = `**/**${is_cmd.name} `;
             is_cmd.options?.forEach(option => { usage += option.required ? `[${option.name}]` : `(${option.name})` });
+
+            usage = usage.split(' ');
             return interaction.createFollowup({ embed: {
                 title: `${is_cmd.category} : ${this.client.extensions.string.upperFirst(is_cmd.name)}`,
                 fields: [
                     { name: 'Description', value: is_cmd.description ?? 'No description provided' },
-                    { name: 'Usage', value: usage.split(' ')[1] ? `${usage.split(' ')[0]} \`${usage.split(' ')[1]}\`` : 'No usage-example provided'  }
+                    { name: 'Usage', value: usage[1] ? `${usage[0]} \`${usage[1]}\`` : 'No usage-example provided'  }
                 ],
                 footer: { text: '[ ] = Required Arguments      ( ) = Optional Arguments' }
             }});
