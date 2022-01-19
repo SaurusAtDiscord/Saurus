@@ -75,7 +75,7 @@ module.exports = class Help extends Command {
             }});
         } else if (is_cmd) {
             let usage = `**/**${is_cmd.name} `;
-            is_cmd.options?.forEach(option => usage += (option.required ? `[${option.name}]` : `(${option.name})`));
+            is_cmd.options?.forEach(option => { usage += option.required ? `[${option.name}]` : `(${option.name})` });
             return interaction.createFollowup({ embed: {
                 title: `${is_cmd.category} : ${this.client.extensions.string.upperFirst(is_cmd.name)}`,
                 fields: [
