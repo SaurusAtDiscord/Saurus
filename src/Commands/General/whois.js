@@ -16,8 +16,9 @@ module.exports = class Whois extends Command {
                 'type': Constants.ApplicationCommandOptionTypes.USER
             }]
         });
-    }   
+    }
 
+    /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
         const user = (args.user && await this.client.utils.getMember(interaction.guildID, args.user)) ?? interaction.member;
         const roles = user.roles.map(role => user.guild.roles.get(role)).sort((a, b) => b.position - a.position).map(role => `<@&${role.id}>`);
@@ -35,7 +36,7 @@ module.exports = class Whois extends Command {
                 }
             ],
             thumbnail: { url: user.avatarURL },
-            color: roles.length ?? user.guild.roles.get(this.client.stringUtils.splitNumbers(roles[0])).color
+            color: roles.length && user.guild.roles.get(this.client.stringUtils.splitNumbers(roles[0])).color
         }});
     }
 }

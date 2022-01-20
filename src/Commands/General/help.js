@@ -21,6 +21,7 @@ module.exports = class Help extends Command {
         });
     }
 
+    /* Calling the method "execute" on Command class. */
     execute(interaction, args) {
         if (_.isEmpty(args)) {
             const component = new ButtonHelper();
@@ -79,7 +80,7 @@ module.exports = class Help extends Command {
 
             usage = usage.split(' ');
             return interaction.createFollowup({ embed: {
-                title: `${is_cmd.category} : ${this.client.utils.stringUtils.upperFirst(is_cmd.name)}`,
+                title: `${is_cmd.category} : ${this.client.stringUtils.upperFirst(is_cmd.name)}`,
                 fields: [
                     { name: 'Description', value: is_cmd.description ?? 'No description provided' },
                     { name: 'Usage', value: usage[1] ? `${usage[0]} \`${usage[1]}\`` : 'No usage-example provided'  }
