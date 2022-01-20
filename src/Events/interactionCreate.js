@@ -4,6 +4,8 @@ const Event = require('@core/Event');
 const { Constants } = require('eris');
 
 module.exports = class interactionCreate extends Event {
+
+    /* Calling the method "execute" on Event class. */
     async execute(interaction) {
         if (interaction.constructor.name !== 'CommandInteraction') return;
         const command = this.client.commands.find(cmd => cmd.name === interaction.data.name?.toLowerCase());

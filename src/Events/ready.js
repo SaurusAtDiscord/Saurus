@@ -4,6 +4,8 @@ const Event = require('@core/Event');
 const { isEqual } = require('lodash');
 
 module.exports = class ready extends Event {
+	
+	/* Calling the method "execute" on Event class. */
 	async execute() {
 		const clientCommands = await (process.env.NODE_ENV === 'development' ? this.client.getGuildCommands(process.env.DEVELOPMENT) : this.client.getCommands());
 
