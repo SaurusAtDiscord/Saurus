@@ -44,7 +44,7 @@ module.exports = class createMessageComponentCollector extends EventEmitter {
 
 	/**
 	 * Stops listening to the client for new interactions.
-	 * @param reason The reason the collector ended.
+	 * @param { String } reason The reason the collector ended.
 	 */
 	stopListening(reason) {
 		if (this.ended) return;

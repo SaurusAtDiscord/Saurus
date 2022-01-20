@@ -7,9 +7,14 @@ const { readdirSync } = require('fs');
 const { join } = require('path');
 
 module.exports = class SaurusNode extends Eris.Client {
+    /**
+     * Create Saurus Node.
+     * @param { String } key The bot's token.
+     */
     constructor(key) {
         super(key, {
             restMode: true,
+            compress: true,
             maxShards: 'auto',
 			intents: [
 				'guildBans',
@@ -24,14 +29,13 @@ module.exports = class SaurusNode extends Eris.Client {
         this.commands = [ ]
         this.categories = [ ]
         
-        this.utils = new (require('@extensions/Eris'))(this);
-        this.stringUtils = require('@extensions/String');
+        this.utils = new (require('@extensions/utils'))(this);
+        this.stringUtils = require('@extensions/stringUtils');
     }
 
     /**
      * Loads all the commands in the commands directory.
      * @param { String } dir The directory to load commands from.
-     * @returns { null }
      */
     loadCommands(dir) {
         readdirSync(dir)
@@ -44,8 +48,7 @@ module.exports = class SaurusNode extends Eris.Client {
 
     /**
      * Load all the JavaScript files in the `events` directory and execute them.
-     * @param { String } dir - The directory to load events from.
-     * @returns { null }
+     * @param { String } dir The directory to load events from.
      */
     loadEvents(dir) {        
         readdirSync(dir).filter(file => file.endsWith('.js'))
@@ -58,8 +61,7 @@ module.exports = class SaurusNode extends Eris.Client {
 
     /**
      * Loads the commands and events from the commands and events directories and then connects to the Discord API.
-    * @returns { null }
-    */
+     */
     initiate() {
         this.loadCommands(join(__dirname, '../commands'));
         this.loadEvents(join(__dirname, '../events'));

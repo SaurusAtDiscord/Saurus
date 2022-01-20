@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = class Eris {
+module.exports = class Utils {
     /**
      * @param { Eris.Client } client - The client.
      */

@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 'use strict';
 
 module.exports = class Command {
     /**
+     * Command structure.
      * @param { Eris.Client } client The client.
      * @param { Object } options Options for the command.
      */
@@ -19,5 +21,13 @@ module.exports = class Command {
         this.ownerOnly = options.ownerOnly;
 
         this.options = options.options;
+    }
+
+    /**
+     * @param { CommandInteraction } interaction SlashCommand Interaction.
+     * @param { Object } args The arguments passed to the command.
+     */
+    execute(interaction, args) {
+
     }
 }
