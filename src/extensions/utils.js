@@ -2,32 +2,39 @@
 
 module.exports = class Utils {
     /**
-     * @param { Eris.Client } client - The client.
+     * @param { Eris.Client } client The client.
      */
     constructor(client) {
         this.client = client;
     }
 
     /**
-     * If we're in development, delete the command from the guild. Otherwise, delete the command from the client.
-     * @param { String } commandId The ID of the command to delete.
-     */
-    deleteCommand(commandId) {
-        if (process.env.NODE_ENV === 'development') this.client.deleteGuildCommand(process.env.DEVELOPMENT, commandId)
-        else this.client.deleteCommand(commandId);
-    }
-
-    /**
-     * If we're in development, create the command from the guild. Otherwise, create the command from the client.
+     * Create a Command.
      * @param { Array } context The context of the command.
      */
     createCommand(context) {
-        if (process.env.NODE_ENV === 'development') this.client.bulkEditGuildCommands(process.env.DEVELOPMENT, context)
-        else this.client.bulkEditCommands(context);
+        void (process.env.NODE_ENV === 'development' ? this.client.bulkEditGuildCommands(process.env.DEVELOPMENT, context) : this.client.bulkEditCommands(context));
     }
 
     /**
-     * `getGuild` returns a guild object from the cache, or from the API if it's not in the cache.
+     * Edit a Command.
+     * @param { Object } command The command object to edit.
+     * @param { String } commandId The ID of the command to edit.
+     */
+    editCommand(command, commandId) {
+        void (process.env.NODE_ENV === 'development' ? this.client.editGuildCommand(process.env.DEVELOPMENT, commandId, command) : this.client.editCommand(command, commandId));
+    }
+
+    /**
+     * Delete a Command.
+     * @param { String } commandId The ID of the command to delete.
+     */
+    deleteCommand(commandId) {
+        void (process.env.NODE_ENV === 'development' ? this.client.deleteGuildCommand(process.env.DEVELOPMENT, commandId) : this.client.deleteCommand(commandId));
+    }
+
+    /**
+     * Returns a guild object from the cache, or from the API if it's not in the cache.
      * @param { String } guildId The ID of the guild to get.
      * @returns { Object } The guild object.
      */
