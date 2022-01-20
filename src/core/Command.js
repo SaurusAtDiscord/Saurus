@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 'use strict';
 
 module.exports = class Command {
@@ -21,13 +20,5 @@ module.exports = class Command {
         this.ownerOnly = options.ownerOnly;
 
         this.options = options.options;
-    }
-
-    /**
-     * @param { CommandInteraction } interaction SlashCommand Interaction.
-     * @param { Object|undefined } args The arguments passed to the command.
-     */
-    execute(interaction, args) {
-
     }
 }
