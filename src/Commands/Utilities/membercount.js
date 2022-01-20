@@ -12,9 +12,9 @@ module.exports = class Membercount extends Command {
 
     /* Calling the method "execute" on Command class. */
     async execute(interaction) {
-        const guild = await this.client.utils.getGuild();
+        const guild = await this.client.utils.getGuild(interaction.guildID);
         return interaction.createFollowup({ embed: { fields: [
-            { name: 'Members', value: await guild.fetchAllMembers(), inline: true },
+            { name: 'Total Members', value: await guild.fetchAllMembers(), inline: true },
             { name: 'Bots', value: guild.members.filter(m => m.bot).length, inline: true }
         ]}});
     }
