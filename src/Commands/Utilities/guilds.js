@@ -10,6 +10,7 @@ module.exports = class Guilds extends Command {
         });
     }
 
+    /* Calling the method "execute" on Command class. */
     execute(interaction) {
         return interaction.createFollowup({ embed: { description: `I'm in \`${this.client.guilds.size ?? 'NaN'}\` guild(s) :partying_face:` }});
     }

@@ -10,6 +10,7 @@ module.exports = class Membercount extends Command {
         });
     }
 
+    /* Calling the method "execute" on Command class. */
     async execute(interaction) {
         const guild = await this.client.utils.getGuild();
         return interaction.createFollowup({ embed: { fields: [

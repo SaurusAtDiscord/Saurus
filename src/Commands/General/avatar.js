@@ -15,8 +15,9 @@ module.exports = class Avatar extends Command {
                 'type': Constants.ApplicationCommandOptionTypes.USER
             }]
         });
-    }   
+    }
 
+    /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
         const user = (args.user && await this.client.utils.getMember(interaction.guildID, args.user)) ?? interaction.member;
 

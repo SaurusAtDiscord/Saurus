@@ -11,6 +11,7 @@ module.exports = class Uptime extends Command {
         });
     }
 
+    /* Calling the method "execute" on Command class. */
     execute(interaction) {
         return interaction.createFollowup({ embed: { description: `\`${prettyMS(this.client.uptime, { verbose: true })}\`` }});
     }

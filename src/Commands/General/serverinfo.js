@@ -12,11 +12,12 @@ module.exports = class Serverinfo extends Command {
         });
     }
 
+    /* Adding the method "execute" on Command class. */
     async execute(interaction) {
         const guild = await this.client.utils.getGuild(interaction.guildID);
         const guildOwner = guild && await this.client.utils.getUser(guild.ownerID);
 
-        const roles = guild.roles.map(role => role).sort((a, b) => b.position - a.position).map(role => (!role.id && role.name) || `<@&${role.id}>`);
+        const roles = guild.roles.map(role => role).sort((a, b) => b.position - a.position).map(role => (role.name === '@everyone' ? role.name : `<@&${role.id}>`));
         return interaction.createFollowup({ embed: {
             author: {
 				name: guild.name,
