@@ -25,7 +25,7 @@ module.exports = class Command {
 
     /**
      * @param { CommandInteraction } interaction SlashCommand Interaction.
-     * @param { Object } args The arguments passed to the command.
+     * @param { Object|undefined } args The arguments passed to the command.
      */
     execute(interaction, args) {
 
