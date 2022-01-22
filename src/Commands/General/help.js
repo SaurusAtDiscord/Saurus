@@ -22,13 +22,15 @@ module.exports = class Help extends Command {
     }
 
     /* Calling the method "execute" on Command class. */
-    execute(interaction, args) {
+    async execute(interaction, args) {
         if (_.isEmpty(args)) {
             const component = new ButtonHelper();
             const uniId = _.uniqueId('help_@');
 
-            this.client.categories.forEach(category => component.createButton(category, 2, `${uniId} ${interaction.member.id} ${category}`));
-            
+            this.client.categories.forEach(category => component.createButton(category, Constants.ButtonStyles.SECONDARY, `${uniId} ${interaction.member.id} ${category}`));
+            component.createRow();
+            component.createButton('Our Discord', Constants.ButtonStyles.LINK, 'https://discord.gg/DEHSHTEj3h');
+
             interaction.createFollowup({ 
                 embed: {
                     title: 'Help',
@@ -37,7 +39,7 @@ module.exports = class Help extends Command {
                 components: component.parse()
             });
             
-            return new InteractionCollector(this.client, {
+            return await InteractionCollector(this.client, {
                 time: 60000,
                 filter: i => (i.data.custom_id.split(' ')[0] === uniId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
             })
@@ -66,7 +68,7 @@ module.exports = class Help extends Command {
 
         const is_cmd = this.client.commands.find(cmd => cmd.name === args.command_or_category.toLowerCase());
         const is_category = this.client.categories.find(category => category.toLowerCase() === args.command_or_category.toLowerCase());
-
+        
         if (is_category) {
             const fields = this.client.commands.filter(cmd => cmd.category === is_category).map(cmd => Object.assign({}, { name: cmd.name, value: cmd.description }));
             return interaction.createFollowup({ embed: {
