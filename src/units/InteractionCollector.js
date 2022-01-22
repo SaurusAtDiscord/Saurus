@@ -35,11 +35,10 @@ module.exports = class createMessageComponentCollector extends EventEmitter {
 
 			if (this.options.maxMatches && this.collected >= this.options.maxMatches) {
 				this.stopListening('maxMatches');
-				return true;
 			}
 		}
-
-		return false;
+		
+		return this.ended;
 	}
 
 	/**
