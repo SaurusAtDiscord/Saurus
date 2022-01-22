@@ -39,7 +39,7 @@ module.exports = class Help extends Command {
                 components: component.parse()
             });
             
-            return await new InteractionCollector(this.client, {
+            await new InteractionCollector(this.client, {
                 time: 60000,
                 filter: i => (i.data.custom_id.split(' ')[0] === uniId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
             })
@@ -64,6 +64,7 @@ module.exports = class Help extends Command {
                 component.disable('all');
                 interaction.editOriginalMessage({ components: component.parse() });
             });
+            return;
         }
 
         const is_cmd = this.client.commands.find(cmd => cmd.name === args.command_or_category.toLowerCase());
