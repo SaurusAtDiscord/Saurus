@@ -13,7 +13,7 @@ module.exports = class Utils {
      * @param { Array } context The context of the command.
      */
     createCommand(context) {
-        (process.env.NODE_ENV === 'development' ? this.client.bulkEditGuildCommands(process.env.DEVELOPMENT, context) : this.client.bulkEditCommands(context));
+        void (process.env.NODE_ENV === 'development' ? this.client.bulkEditGuildCommands(process.env.DEVELOPMENT, context) : this.client.bulkEditCommands(context));
     }
 
     /**
@@ -22,7 +22,7 @@ module.exports = class Utils {
      * @param { String } commandId The ID of the command to edit.
      */
     editCommand(command, commandId) {
-        (process.env.NODE_ENV === 'development' ? this.client.editGuildCommand(process.env.DEVELOPMENT, commandId, command) : this.client.editCommand(command, commandId));
+        void (process.env.NODE_ENV === 'development' ? this.client.editGuildCommand(process.env.DEVELOPMENT, commandId, command) : this.client.editCommand(command, commandId));
     }
 
     /**
@@ -30,7 +30,7 @@ module.exports = class Utils {
      * @param { String } commandId The ID of the command to delete.
      */
     deleteCommand(commandId) {
-        (process.env.NODE_ENV === 'development' ? this.client.deleteGuildCommand(process.env.DEVELOPMENT, commandId) : this.client.deleteCommand(commandId));
+        void (process.env.NODE_ENV === 'development' ? this.client.deleteGuildCommand(process.env.DEVELOPMENT, commandId) : this.client.deleteCommand(commandId));
     }
 
     /**
