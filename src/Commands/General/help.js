@@ -39,7 +39,7 @@ module.exports = class Help extends Command {
                 components: component.parse()
             });
             
-            return await InteractionCollector(this.client, {
+            return await new InteractionCollector(this.client, {
                 time: 60000,
                 filter: i => (i.data.custom_id.split(' ')[0] === uniId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
             })
