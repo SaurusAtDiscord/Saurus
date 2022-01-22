@@ -14,7 +14,7 @@ module.exports = class ButtonHelper { // Credit to Spencer0003 and DonovanDMC
     /**
      * Create a new row in the rows array.
      */
-    #createRow() {
+    createRow() {
         this.rows.push({ type: Constants.ComponentTypes.ACTION_ROW, components: [] });
     }
 
@@ -22,7 +22,7 @@ module.exports = class ButtonHelper { // Credit to Spencer0003 and DonovanDMC
      * If the last row in the table has reached the maximum number of rows, or if the last row in the table has no components, then create a new row.
      */
     #addRowIfRequired() {
-        if (this.rows.length === 0 || this.rows[this.rows.length - 1].components.length >= this.maxRows || this.rows[this.rows.length - 1].components[0]?.type === 3) this.#createRow();
+        if (this.rows.length === 0 || this.rows[this.rows.length - 1].components.length >= this.maxRows || this.rows[this.rows.length - 1].components[0]?.type === 3) this.createRow();
     }
 
     /**
@@ -59,13 +59,19 @@ module.exports = class ButtonHelper { // Credit to Spencer0003 and DonovanDMC
      */
     createButton(label, style, custom_id, emoji, disabled = false) {    
         this.#addRowIfRequired();
-        this.rows[this.rows.length - 1].components.push({
+        const ob = style === Constants.ButtonStyles.LINK ? {
+            type: Constants.ComponentTypes.BUTTON,
+            label,
+            style,
+            url: custom_id
+        } : {
             type: Constants.ComponentTypes.BUTTON,
             label,
             style,
             custom_id,
             emoji,
             disabled
-        });
+        }
+        this.rows[this.rows.length - 1].components.push(ob);
     }
 }
