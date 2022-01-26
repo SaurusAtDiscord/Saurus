@@ -21,14 +21,14 @@ module.exports = class Whois extends Command {
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
         const user = (args.user && await this.client.utils.getMember(interaction.guildID, args.user)) ?? interaction.member;
-        const roles = user.roles.map(role => user.guild.roles.get(role)).sort((a, b) => b.position - a.position).map(role => `<@&${role.id}>`);
+        const roles = user.roles && user.roles.map(role => user.guild.roles.get(role)).sort((a, b) => b.position - a.position).map(role => `<@&${role.id}>`);
 
         return interaction.createFollowup({ embed: {
             author: { name: `${user.username}#${user.discriminator}`, icon_url: user.avatarURL },
             fields: [
                 {
                     name: 'Guild Details',
-                    value: `• Nickname: ${user.nick ?? 'No Nickname'}\n• Joined at: ${moment(new Date(user.joinedAt)).format('LL')} (\`${moment(user.joinedAt).fromNow()}\`)${roles.length ? '\n• Roles: ' + roles.join(' ') : ''}` // skipcq JS-0246
+                    value: `• Nickname: ${user.nick ?? 'No Nickname'}\n• Joined at: ${moment(new Date(user.joinedAt)).format('LL')} (\`${moment(user.joinedAt).fromNow()}\`)${roles.length ? '\n• Roles: ' + roles.join(' ') : ''}`
                 },
                 {
                     name: 'User Details',
