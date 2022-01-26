@@ -24,6 +24,8 @@ module.exports = class interactionCreate extends Event {
             const args = {};
             interaction.data.options?.forEach(input => args[input.name] = input.value);
             command.execute(interaction, args);
+        } else if (interaction.constructor.name === 'ComponentInteraction') {
+            await interaction.acknowledge();
         }
     }
 }

@@ -40,12 +40,11 @@ module.exports = class Help extends Command {
                 components: component.parse()
             });
             
-            await new InteractionCollector(this.client, {
+            return await new InteractionCollector(this.client, {
                 time: 60000,
                 filter: i => (i.data.custom_id.split(' ')[0] === uniId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
             })
-            .on('collect', async res => {
-                await res.acknowledge();
+            .on('collect', res => {
                 const data = res.data.custom_id;
                 const is_category = this.client.categories.find(category => category === data.split(' ')[2]);
                 const fields = this.client.commands.filter(cmd => cmd.category === is_category).map(cmd => Object.assign({}, { name: cmd.name, value: cmd.description }));
@@ -65,7 +64,6 @@ module.exports = class Help extends Command {
                 component.disable('all');
                 interaction.editOriginalMessage({ components: component.parse() });
             });
-            return;
         }
 
         const is_cmd = this.client.commands.find(cmd => cmd.name === args.command_or_category.toLowerCase());
