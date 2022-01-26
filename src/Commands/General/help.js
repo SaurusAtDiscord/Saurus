@@ -5,7 +5,7 @@ const ButtonHelper = require('@units/ComponentHandler');
 const InteractionCollector = require('@units/InteractionCollector');
 
 const { Constants } = require('eris');
-const _ = require('underscore');
+const enc = require('crypto');
 
 module.exports = class Help extends Command {
     constructor(client) {
@@ -23,11 +23,12 @@ module.exports = class Help extends Command {
 
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
-        if (_.isEmpty(args)) {
+        if (Object.keys(args).length === 0) {
             const component = new ButtonHelper();
-            const uniId = _.uniqueId('help_@');
+            const uniId = enc.randomUUID().substring(0, 5);
 
             this.client.categories.forEach(category => component.createButton(category, Constants.ButtonStyles.SECONDARY, `${uniId} ${interaction.member.id} ${category}`));
+            
             component.createRow();
             component.createButton('Our Discord', Constants.ButtonStyles.LINK, 'https://discord.gg/DEHSHTEj3h');
 
