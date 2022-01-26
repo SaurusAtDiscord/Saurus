@@ -40,11 +40,11 @@ module.exports = class Help extends Command {
                 components: component.parse()
             });
             
-            return await new InteractionCollector(this.client, {
+            const collector = await new InteractionCollector(this.client, {
                 time: 60000,
                 filter: i => (i.data.custom_id.split(' ')[0] === uniId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
-            })
-            .on('collect', res => {
+            });
+            return collector.on('collect', res => {
                 const data = res.data.custom_id;
                 const is_category = this.client.categories.find(category => category === data.split(' ')[2]);
                 const fields = this.client.commands.filter(cmd => cmd.category === is_category).map(cmd => Object.assign({}, { name: cmd.name, value: cmd.description }));
