@@ -9,6 +9,7 @@ module.exports = class Avatar extends Command {
             name: 'avatar',
             description: 'Get a users avatar',
             
+            //userPermissions: ['banMembers'],
             options: [{
                 'name': 'user',
                 'description': 'Fetch this users avatar',

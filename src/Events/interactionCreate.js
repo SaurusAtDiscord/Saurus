@@ -12,13 +12,14 @@ module.exports = class interactionCreate extends Event {
             if (!command) return;
 
             await interaction.acknowledge(command.name === 'help' && Constants.MessageFlags.EPHEMERAL);
-            // if (comma) {
-            //     const perms = interaction.channel.permissionsOf(this.client.user.id);
-            //     const missingPerms = command.permissions.filter(perm => !perms.has(perm));
-            //     const missingUserPerms = command.userPermissions.filter(perm => !perms.has(perm));
-
-            //     if (missingUserPerms.length) return interaction.createFollowup({ embed: { description: missingUserPerms }});
-            // }
+            
+            // const channelPermissions = interaction.channel?.permissionsOf(this.client.user.id);
+            // const clientPermissions = command.clientPermissions?.filter(p => !channelPermissions.has(p));
+            // const userPermissions = command.userPermissions?.filter(p => !channelPermissions.has(p));
+            
+            // const dodo = clientPermissions || userPermissions;
+            // console.log(dodo);
+            // if (dodo.length > 0) return interaction.createFollowup({ embed: { description: `MISSING PERMISSIONS\n\`${dodo.join(' ,')}\`` }});
 
             const args = {};
             interaction.data.options?.forEach(input => args[input.name] = input.value);
