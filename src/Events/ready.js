@@ -1,6 +1,7 @@
 'use strict';
 
 const Event = require('@core/Event');
+const { Constants } = require('eris');
 
 module.exports = class ready extends Event {
 	
@@ -19,7 +20,7 @@ module.exports = class ready extends Event {
             const statuses = [ `over ${this.client.guilds.size ?? 'NaN'} guilds`, 'zzz' ]
             this.client.editStatus('idle', {
                 name: `${statuses[Math.floor(Math.random() * statuses.length)]}`,
-                type: 3
+                type: Constants.ActivityTypes.WATCHING
             });
         }, 30000);
 	}
