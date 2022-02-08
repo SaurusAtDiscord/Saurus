@@ -1,5 +1,5 @@
 'use strict';
-
+//test
 const Command = require('@core/Command');
 const { Constants } = require('eris');
 
