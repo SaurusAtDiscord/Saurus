@@ -32,7 +32,7 @@ module.exports = class interactionCreate extends Event {
 
             const args = {};
             interaction.data.options?.forEach(input => { args[input.name] = input.value });
-            return command.execute(interaction, args);
+            command.execute(interaction, args);
         }
     }
 }
