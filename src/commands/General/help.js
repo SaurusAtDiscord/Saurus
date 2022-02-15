@@ -79,13 +79,15 @@ module.exports = class Help extends Command {
         } else if (is_cmd) {
             let usage = `**/**${is_cmd.name} `;
             is_cmd.options?.forEach(option => { usage += option.required ? `[${option.name}]` : `(${option.name})` });
-
+            
             usage = usage.split(' ');
+            const [cmdName, ...cmdArgs] = usage;
+            
             return interaction.createFollowup({ embed: {
                 title: `${is_cmd.category} : ${this.client.stringUtils.upperFirst(is_cmd.name)}`,
                 fields: [
                     { name: 'Description', value: is_cmd.description ?? 'No description provided' },
-                    { name: 'Usage', value: usage[1] ? `${usage[0]} \`${usage[1]}\`` : 'No usage-example provided' },
+                    { name: 'Usage', value: cmdArgs ? `${cmdName} \`${cmdArgs}\`` : 'No usage-example provided' },
                     { name: 'Permissions', value: `• User: \`${is_cmd.userPermissions?.join(', ') ?? 'None'}\`\n• Me: \`${is_cmd.clientPermissions?.join(', ') ?? 'None'}\`` }
                 ],
                 footer: { text: '[ ] = Required Arguments      ( ) = Optional Arguments' }
