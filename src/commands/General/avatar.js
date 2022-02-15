@@ -19,7 +19,7 @@ module.exports = class Avatar extends Command {
 
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
-        const user = (args.user && await this.client.utils.getMember(interaction.guildID, args.user).catch(() => {})) ?? interaction.member;
+        const user = (args.user && await this.client.utils.getMember(interaction.guildID, args.user).catch(() => null)) ?? interaction.member;
 
         return interaction.createFollowup({ embed: {
             title: `${user.username}#${user.discriminator}'s Avatar`,

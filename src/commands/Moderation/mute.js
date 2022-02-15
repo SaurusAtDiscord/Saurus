@@ -27,11 +27,12 @@ module.exports = class Mute extends Command {
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
         const guild = await this.client.utils.getGuild(interaction.guildID);
-        const member = await this.client.utils.getMember(interaction.guildID, args.target).catch(() => {});
+        const member = await this.client.utils.getMember(interaction.guildID, args.target).catch(() => null);
         
         if (!member) return interaction.createFollowup({ embed: { description: 'Could not find provided user.' }});
         if (member.bot) return interaction.createFollowup({ embed: { description: 'Muting a bot is not permitted.' }});
         if (member.id === interaction.member.id) return interaction.createFollowup({ embed: { description: 'You cannot mute yourself.' }});
+        if (member.communicationDisabledUntil) return interaction.createFollowup({ embed: { description: 'This user is already muted.' }});
         
         const identId = enc.randomUUID().substring(0, 5);
         const buttonHolder = new componentHelper();
@@ -61,7 +62,7 @@ module.exports = class Mute extends Command {
 
         return interaction.editOriginalMessage({ 
             embed: { 
-                description: `Successfully muted \`${member.username}#${member.discriminator}\` for **${choice}**` 
+                description: `Successfully muted \`${member.username}#${member.discriminator}\` for **${time}**` 
             },
             components: []
         });
