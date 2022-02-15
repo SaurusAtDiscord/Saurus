@@ -17,10 +17,9 @@ module.exports = class SaurusNode extends Eris.Client {
             compress: true,
             maxShards: 'auto',
 			intents: [
+                'directMessages',
 				'guildBans',
 				'guildMembers',
-				'guildMessageReactions',
-				'guildMessages',
 				'guilds'
 			],
             disableEvents: { TYPING_START: true }
