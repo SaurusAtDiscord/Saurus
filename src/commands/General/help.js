@@ -92,6 +92,6 @@ module.exports = class Help extends Command {
             }});
         }
 
-        interaction.createFollowup({ embed: { description: `\`${args.command_or_category}\` **is not a valid command/category, try once more.**` }});
+        return interaction.createFollowup({ embed: { description: `\`${args.command_or_category}\` **is not a valid command/category, try once more.**` }});
     }
 }

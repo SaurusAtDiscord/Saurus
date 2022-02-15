@@ -19,8 +19,10 @@ module.exports = class Serverinfo extends Command {
         const members = await guild.fetchMembers();
 
         const roles = guild.roles.map(role => role).sort((a, b) => b.position - a.position).filter(role => role.name !== '@everyone');
+        const stringedRoles = roles.map(role => `<@&${role.id}>`);
+
         const createdAt = DateTime.fromISO(new Date(guild.createdAt).toISOString());
-        interaction.createFollowup({ embed: {
+        return interaction.createFollowup({ embed: {
             author: {
 				name: guild.name,
 				icon_url: guild.iconURL
@@ -39,7 +41,7 @@ module.exports = class Serverinfo extends Command {
 				},
                 {
                     name: `Miscellaneous`,
-                    value: `• Roles: ${(roles.map(role => '<@&' + role.id + '>')).join(' ')} \n• Text Channels: ${guild.channels.filter(channel => channel.type === Constants.ChannelTypes.GUILD_TEXT).length} \n• Voice Channels: ${guild.channels.filter(channel => channel.type === Constants.ChannelTypes.GUILD_VOICE).length} \n• Boosts Count: ${guild.premiumSubscriptionCount || '0'}`
+                    value: `• Roles: ${stringedRoles.join(' ')} \n• Text Channels: ${guild.channels.filter(channel => channel.type === Constants.ChannelTypes.GUILD_TEXT).length} \n• Voice Channels: ${guild.channels.filter(channel => channel.type === Constants.ChannelTypes.GUILD_VOICE).length} \n• Boosts Count: ${guild.premiumSubscriptionCount || '0'}`
                 }
 			]
         }});

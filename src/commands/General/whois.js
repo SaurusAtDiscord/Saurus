@@ -27,7 +27,7 @@ module.exports = class Whois extends Command {
         
         const joinedAt = DateTime.fromISO(new Date(user.joinedAt).toISOString());
         const createdAt = DateTime.fromISO(new Date(user.createdAt).toISOString());
-        interaction.createFollowup({ embed: {
+        return interaction.createFollowup({ embed: {
             author: { name: `${user.username}#${user.discriminator}`, icon_url: user.avatarURL },
             fields: [
                 {

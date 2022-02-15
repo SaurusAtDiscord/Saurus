@@ -12,6 +12,6 @@ module.exports = class Botinfo extends Command {
 
     /* Calling the method "execute" on Command class. */
     execute(interaction) {
-        interaction.createFollowup({ embed: { description: `I'm a bot made by <@${process.env.MASTER}>` }});
+        return interaction.createFollowup({ embed: { description: `I'm a bot made by <@${process.env.MASTER}>` }});
     }
 }

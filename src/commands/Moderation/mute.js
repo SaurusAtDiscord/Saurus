@@ -32,12 +32,12 @@ module.exports = class Mute extends Command {
         if (!member) return interaction.createFollowup({ embed: { description: 'Could not find provided user.' }});
         if (member.bot) return interaction.createFollowup({ embed: { description: 'Muting a bot is not permitted.' }});
         if (member.id === interaction.member.id) return interaction.createFollowup({ embed: { description: 'You cannot mute yourself.' }});
-
+        
         const identId = enc.randomUUID().substring(0, 5);
         const buttonHolder = new componentHelper();
 
-        const time_enums = { '60Seconds': 60, '5Minutes': 300, '10Minutes': 600, '30Minutes': 1800, '1Hour': 3600, '12Hours': 43200, '1Day': 86400, '1Week': 604800 };
-        Object.entries(time_enums).forEach(time => buttonHolder.createButton(time[0].replace(/(\d)([a-z])/gi, '$1 $2'), Constants.ButtonStyles.SECONDARY, `${identId} ${interaction.member.id} ${time[0]}`));
+        const time_enums = { '60 Seconds': 60, '5 Minutes': 300, '10 Minutes': 600, '30 Minutes': 1800, '1 Hour': 3600, '12 Hours': 43200, '1 Day': 86400, '1 Week': 604800 };
+        Object.entries(time_enums).forEach(time => buttonHolder.createButton(time[0], Constants.ButtonStyles.SECONDARY, `id${identId} ${interaction.member.id} time${time[0]}`));
         
         interaction.createFollowup({ 
             embed: {
@@ -51,17 +51,17 @@ module.exports = class Mute extends Command {
         let choice = await new interactionCollector(this.client, {
             time: 10000,
             maxMatches: 1,
-            filter: i => (i.data.custom_id.split(' ')[0] === identId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
+            filter: i => (i.data.custom_id.match(/(^id)(.{5})/)[2] === identId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
         }).collectInteractions();
         if (!choice.length) return interaction.editOriginalMessage({ embed: { description: 'You did not respond in time.' }, components: [] });
-        choice = choice[0].interaction.data.custom_id.split(' ')[2];
+        choice = choice[0].interaction.data.custom_id.match(/(time)(.+)/)[2];
 
         const success = await guild.editMember(member.id, { communicationDisabledUntil: new Date(Date.now() + (time_enums[choice] * 1000)).toISOString() });
         if (!success) return interaction.editOriginalMessage({ embed: { description: 'Could not mute user.' }, components: [] });
 
-        interaction.editOriginalMessage({ 
+        return interaction.editOriginalMessage({ 
             embed: { 
-                description: `Successfully muted \`${member.username}#${member.discriminator}\` for **${choice.replace(/(\d)([a-z])/gi, '$1 $2')}**` 
+                description: `Successfully muted \`${member.username}#${member.discriminator}\` for **${choice}**` 
             },
             components: []
         });
