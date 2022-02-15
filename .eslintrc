@@ -1,0 +1,13 @@
+{
+    "root": true,
+    "env": { "node": true, "es6": true },
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "plugins": ["sonarjs"],
+    "extends": [
+      "eslint:recommended",
+      "plugin:sonarjs/recommended"
+    ]
+}
