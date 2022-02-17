@@ -15,6 +15,7 @@ module.exports = class Command {
 
         this.userPermissions = options.userPermissions ?? ['sendMessages', 'viewChannel']
         this.clientPermissions = options.clientPermissions ?? ['sendMessages', 'viewChannel']
+        this.subCommandUserPermissions = options.subCommandUserPermissions ?? {};
 
         this.nsfw = options.nsfw;
         this.ownerOnly = options.ownerOnly;
