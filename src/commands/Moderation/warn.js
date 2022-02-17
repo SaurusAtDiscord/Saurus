@@ -65,8 +65,9 @@ module.exports = class Warn extends Command {
     }
 
     /* Calling the method "execute" on Command class. */
-    async execute(interaction, data) {
-        switch(data.subCommand) {
+    execute(interaction, data) {
+        const { subCommand, args } = data;
+        switch(subCommand) {
           case 'add':
             break;
           case 'list':
@@ -74,6 +75,9 @@ module.exports = class Warn extends Command {
           case 'remove':
             break;
           case 'clear':
+            break;
+          default:
+            interaction.createFollowup({ embed: { description: 'Invalid sub command' }});
             break;
         }
     }

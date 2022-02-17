@@ -52,10 +52,10 @@ module.exports = class Mute extends Command {
         const choice = await new interactionCollector(this.client, {
             time: 60000,
             maxMatches: 1,
-            filter: i => (i.data.custom_id.match(/(^id)(.{5})/)[2] === identId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
+            filter: i => (i.data.custom_id.match(/(?<iden>^id)(?<id>.{5})/).groups.id === identId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
         }).collectInteractions();
         if (!choice.length) return interaction.editOriginalMessage({ embed: { description: 'You did not respond in time.' }, components: [] });
-        const [,, time] = choice[0].interaction.data.custom_id.match(/(time)(.+)/);
+        const time = choice[0].interaction.data.custom_id.match(/(?<iden>time)(?<time>.+)/).groups.time;
 
         const success = await guild.editMember(member.id, { communicationDisabledUntil: new Date(Date.now() + (time_enums[time] * 1000)).toISOString() });
         if (!success) return interaction.editOriginalMessage({ embed: { description: 'Could not mute user.' }, components: [] });
