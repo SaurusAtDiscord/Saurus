@@ -32,7 +32,7 @@ module.exports = class Mute extends Command {
         if (!member) return interaction.createFollowup({ embed: { description: 'Could not find provided user.' }});
         if (member.bot) return interaction.createFollowup({ embed: { description: 'Muting a bot is not permitted.' }});
         if (member.id === interaction.member.id) return interaction.createFollowup({ embed: { description: 'You cannot mute yourself.' }});
-        if (member.communicationDisabledUntil) return interaction.createFollowup({ embed: { description: 'This user is already muted.' }});
+        if (member.communicationDisabledUntil) return interaction.createFollowup({ embed: { description: 'This user is already muted.', footer: { text: 'If user "is already muted" but is false, manually mute and unmute them.' } }});
         
         const identId = enc.randomUUID().substring(0, 5);
         const buttonHolder = new componentHelper();
