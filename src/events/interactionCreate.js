@@ -20,7 +20,7 @@ module.exports = class interactionCreate extends Event {
                 const clientPermissions = command.clientPermissions?.filter(p => !clientChannelPermissions?.has(p));
                 const userPermissions = command.userPermissions?.filter(p => !userChannelPermissions?.has(p));
 
-                const subCommand = interaction.data.options[0]?.name;
+                const subCommand = interaction.data.options?.[0].name;
                 const subCommandUserPermissions = command.subCommandUserPermissions[subCommand]?.filter(p => !userChannelPermissions?.has(p));
 
                 const missing = (subCommandUserPermissions ?? userPermissions ?? clientPermissions);
@@ -31,7 +31,7 @@ module.exports = class interactionCreate extends Event {
             }
 
             const data = {};
-            interaction.data.options?.forEach(async input => {
+            interaction.data.options?.forEach(input => {
                 switch (input.type) {
                   case Constants.ApplicationCommandOptionTypes.SUB_COMMAND_GROUP: // FIXME: Sub command group is not a value.
                     input.options.forEach(subGroup => subGroup.options?.forEach(subInput => { data[subInput.name] = subInput.value }));
