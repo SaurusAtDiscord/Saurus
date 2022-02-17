@@ -1,11 +1,14 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 datasource db {
-  provider = "postgresql"
   url      = env("DATABASE_URL")
+  provider = "mongodb"
 }
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["mongodb"]
+}
+
+model UserWithInfractions {
+  id          String @id @map("_id")
+  infractions String[]
 }
