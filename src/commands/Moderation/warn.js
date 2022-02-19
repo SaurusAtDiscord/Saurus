@@ -2,6 +2,8 @@
 
 const Command = require('@core/Command');
 const { Constants } = require('eris');
+const { DateTime } = require('luxon');
+const enc = require('crypto');
 
 module.exports = class Warn extends Command {
     constructor(client) {
@@ -34,6 +36,7 @@ module.exports = class Warn extends Command {
                     type: Constants.ApplicationCommandOptionTypes.USER,
                     name: 'target',
                     description: 'The user to list warnings',
+                    required: true
                 }]
             }, {
                 type: Constants.ApplicationCommandOptionTypes.SUB_COMMAND,
@@ -65,19 +68,50 @@ module.exports = class Warn extends Command {
     }
 
     /* Calling the method "execute" on Command class. */
-    execute(interaction, data) {
+    async execute(interaction, data) {
         const { subCommand, args } = data;
+        const guildId = interaction.guildID;
+
+        const member = await this.client.utils.getMember(guildId, args.target).catch(() => null);
+        const user = (member && await this.client.database.getUser(`${args.target}:${guildId}`));
+        if (!user) return interaction.createFollowup({ embed: { description: 'Could not find provided user.' }});
+
         switch(subCommand) {
-          case 'add':
+          case 'add': {
+            await this.client.database.updateUser(`${args.target}:${guildId}`, {
+                infractions: { push: {
+                    reason: args.reason ?? 'No reason was provided',
+                    infractionId: enc.randomUUID().substring(0, 10),
+                    issuedBy: interaction.member.id,
+                    createdAt: Date.now()
+                }}
+            });
+            interaction.createFollowup({ embed: { description: `\`${member.username}#${member.discriminator}\` has been warned${args.reason ? (' for ' + args.reason) : '.'}` }});
             break;
-          case 'list':
+          }
+          case 'list': {
+            if (!user.infractions?.length) return interaction.createFollowup({ embed: { description: 'No warnings found for this user.' }});
+            let description = '';
+            
+            user.infractions.forEach(infraction => description += `**ID:** ${infraction.infractionId} | Issued By: <@${infraction.issuedBy}>\n\`${infraction.reason}\` - ${DateTime.fromMillis(infraction.createdAt).toFormat('DDD t')}\n\n`);
+            interaction.createFollowup({ embed: { author: { name: `${member.username}#${member.discriminator} | ${user.infractions.length} warning(s)`, icon_url: member.avatarURL }, description }});
             break;
-          case 'remove':
+          }
+          case 'remove': {
+            if (!user.infractions?.length) return interaction.createFollowup({ embed: { description: 'There are no warnings to remove from this user.' }});
+            const infraction = user.infractions.findIndex(infrac => infrac.infractionId === args.id);
+            if (infraction === -1) return interaction.createFollowup({ embed: { description: `\`${args.id}\` is not a valid id.` }});
+            
+            await this.client.database.updateUser(`${args.target}:${guildId}`, { infractions: user.infractions.splice(infraction, 1) && user.infractions });
+            interaction.createFollowup({ embed: { description: `\`${member.username}#${member.discriminator}\`'s warning has been removed.` }});
             break;
+          }
           case 'clear':
+            await this.client.database.deleteUser(`${args.target}:${guildId}`);
+            interaction.createFollowup({ embed: { description: `\`${member.username}#${member.discriminator}\`'s warnings have been cleared.` }});
             break;
           default:
-            interaction.createFollowup({ embed: { description: 'Invalid sub command' }});
+            interaction.createFollowup({ embed: { description: 'Invalid sub-command.' }});
             break;
         }
     }
