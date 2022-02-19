@@ -36,9 +36,12 @@ module.exports = class interactionCreate extends Event {
                   case Constants.ApplicationCommandOptionTypes.SUB_COMMAND_GROUP: // FIXME: Sub command group is not a value.
                     input.options.forEach(subGroup => subGroup.options?.forEach(subInput => { data[subInput.name] = subInput.value }));
                     break;
-                  case Constants.ApplicationCommandOptionTypes.SUB_COMMAND:
-                    input.options.forEach(subInput => Object.assign(data, { subCommand: input.name, args: subInput.value }));
+                  case Constants.ApplicationCommandOptionTypes.SUB_COMMAND: {
+                    const args = {}
+                    input.options?.forEach(subInput => { args[subInput.name] = subInput.value });
+                    Object.assign(data, { subCommand: input.name, args });
                     break;
+                  }
                   default:
                     data[input.name] = input.value;
                     break;
