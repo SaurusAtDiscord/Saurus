@@ -28,6 +28,7 @@ module.exports = class SaurusNode extends Eris.Client {
         this.commands = [ ]
         this.categories = [ ]
         
+        this.database = new (require('@units/databasehandler'));
         this.utils = new (require('@extensions/utils'))(this);
         this.stringUtils = require('@extensions/stringUtils');
     }
