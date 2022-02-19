@@ -4,11 +4,12 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["mongodb"]
 }
 
-model UserWithInfractions {
-  id          String @id @map("_id")
-  infractions String[]
+model User {
+  id          String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  uuid String @unique
+  infractions Json[]
 }
