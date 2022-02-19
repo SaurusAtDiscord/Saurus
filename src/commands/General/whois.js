@@ -25,18 +25,18 @@ module.exports = class Whois extends Command {
         const stringedMappedRoles = roles.map(role => `<@&${role.id}>`);
         const stringedRole = stringedMappedRoles.length ? `\n• Roles: ${stringedMappedRoles.join(' ')}` : '';
         
-        const joinedAt = DateTime.fromISO(new Date(user.joinedAt).toISOString());
-        const createdAt = DateTime.fromISO(new Date(user.createdAt).toISOString());
+        const joinedAt = DateTime.fromMillis(user.joinedAt);
+        const createdAt = DateTime.fromMillis(user.createdAt);
         return interaction.createFollowup({ embed: {
             author: { name: `${user.username}#${user.discriminator}`, icon_url: user.avatarURL },
             fields: [
                 {
                     name: 'Guild Details',
-                    value: `• Nickname: ${user.nick ?? 'No Nickname'}\n• Joined at: ${joinedAt.toFormat('DDD')} (\`${joinedAt.toRelative()}\`)${stringedRole}`
+                    value: `• Nickname: ${user.nick ?? 'No Nickname'}\n• Joined at: ${joinedAt.toFormat('DDD t')} (\`${joinedAt.toRelative()}\`)${stringedRole}`
                 },
                 {
                     name: 'User Details',
-                    value: `• Identity: ${user.username}#${user.discriminator} (\`${user.id}\`)\n• Registered: ${createdAt.toFormat('DDD')} (\`${createdAt.toRelative()}\`)`
+                    value: `• Identity: ${user.username}#${user.discriminator} (\`${user.id}\`)\n• Registered: ${createdAt.toFormat('DDD t')} (\`${createdAt.toRelative()}\`)`
                 }
             ],
             thumbnail: { url: user.avatarURL },

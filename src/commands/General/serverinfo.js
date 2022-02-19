@@ -21,7 +21,7 @@ module.exports = class Serverinfo extends Command {
         const roles = guild.roles.map(role => role).sort((a, b) => b.position - a.position).filter(role => role.name !== '@everyone');
         const stringedRoles = roles.map(role => `<@&${role.id}>`);
 
-        const createdAt = DateTime.fromISO(new Date(guild.createdAt).toISOString());
+        const createdAt = DateTime.fromMillis(guild.createdAt);
         return interaction.createFollowup({ embed: {
             author: {
 				name: guild.name,
@@ -33,7 +33,7 @@ module.exports = class Serverinfo extends Command {
 			fields: [
                 {
 					name: `Server Information`,
-					value: `• Name: ${guild.name} (\`${guild.id}\`) \n• Owner: ${guildOwner.username}#${guildOwner.discriminator} \n• Created: ${createdAt.toFormat('DDD')} (\`${createdAt.toRelative()}\`)`
+					value: `• Name: ${guild.name} (\`${guild.id}\`) \n• Owner: ${guildOwner.username}#${guildOwner.discriminator} \n• Created: ${createdAt.toFormat('DDD t')} (\`${createdAt.toRelative()}\`)`
 				},
 				{
 					name: `Member Information`,
