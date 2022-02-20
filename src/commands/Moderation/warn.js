@@ -76,8 +76,12 @@ module.exports = class Warn extends Command {
         const user = (member && await this.client.database.getUser(`${args.target}:${guildId}`));
         if (!user) return interaction.createFollowup({ embed: { description: 'Could not find provided user.' }});
 
+        if (['list', 'remove', 'clear'].indexOf(subCommand) !== -1 && !user.infractions?.length) return interaction.createFollowup({ embed: { description: 'No warnings found for this user.' }});
         switch(subCommand) {
           case 'add': {
+            const significantDifference = this.client.utils.differRoles(interaction.member, member);
+            if (!significantDifference) return interaction.createFollowup({ embed: { description: 'I cannot take action against this user due to them having a higher position than you.' }});
+            
             await this.client.database.updateUser(`${args.target}:${guildId}`, {
                 infractions: { push: {
                     reason: args.reason ?? 'No reason was provided',
@@ -90,7 +94,6 @@ module.exports = class Warn extends Command {
             break;
           }
           case 'list': {
-            if (!user.infractions?.length) return interaction.createFollowup({ embed: { description: 'No warnings found for this user.' }});
             let description = '';
             
             user.infractions.forEach(infraction => description += `**ID:** ${infraction.infractionId} | Issued By: <@${infraction.issuedBy}>\n\`${infraction.reason}\` - ${DateTime.fromMillis(infraction.createdAt).toFormat('DDD t')}\n\n`);
@@ -98,7 +101,6 @@ module.exports = class Warn extends Command {
             break;
           }
           case 'remove': {
-            if (!user.infractions?.length) return interaction.createFollowup({ embed: { description: 'There are no warnings to remove from this user.' }});
             const infraction = user.infractions.findIndex(infrac => infrac.infractionId === args.id);
             if (infraction === -1) return interaction.createFollowup({ embed: { description: `\`${args.id}\` is not a valid id.` }});
             
