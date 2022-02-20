@@ -61,4 +61,19 @@ module.exports = class Utils {
         const guild = await this.getGuild(guildId);
         return guild && (guild.members.get(memberId) ?? guild.members.add(await this.client.getRESTGuildMember(guildId, memberId)));
     }
+
+    /**
+     * If the victim has no roles, or the differ has no roles, return true. If the victim has a higher role
+     * than the differ, return false
+     * @param { Eris.Member } victim The user to check.
+     * @param { Eris.Member } differ The user to check against.
+     * @returns { Boolean} Whether or not the victim has a higher role than the differ.
+     */
+    differRoles(victim, differ) {
+        if (victim.roles.length === 0 || differ.roles.length === 0) return true;
+        const highestRole = (m) => {
+            return m.roles.map(role => m.guild.roles.get(role))?.sort((a, b) => b.position - a.position)?.[0];
+        }
+        return highestRole(victim).position > highestRole(differ).position;
+    }
 }
