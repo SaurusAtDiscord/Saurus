@@ -34,6 +34,9 @@ module.exports = class Mute extends Command {
         if (member.id === interaction.member.id) return interaction.createFollowup({ embed: { description: 'You cannot mute yourself.' }});
         if (member.communicationDisabledUntil) return interaction.createFollowup({ embed: { description: 'This user is already muted.', footer: { text: 'If user "is already muted" but is false, manually mute and unmute them.' } }});
         
+        const significantDifference = this.client.utils.differRoles(interaction.member, member);
+        if (!significantDifference) return interaction.createFollowup({ embed: { description: 'I cannot take action against this user due to them having a higher position than you.' }});
+
         const identId = enc.randomUUID().substring(0, 5);
         const buttonHolder = new componentHelper();
 
