@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 'use strict';
 
 const Command = require('@core/Command');
@@ -75,10 +76,12 @@ module.exports = class Warn extends Command {
         const member = await this.client.utils.getMember(guildId, args.target).catch(() => null);
         const user = (member && await this.client.database.getUser(`${args.target}:${guildId}`));
         if (!user) return interaction.createFollowup({ embed: { description: 'Could not find provided user.' }});
+        if (member.bot) return interaction.createFollowup({ embed: { description: 'Bots do not have warning data.' }});
 
         if (['list', 'remove', 'clear'].indexOf(subCommand) !== -1 && !user.infractions?.length) return interaction.createFollowup({ embed: { description: 'No warnings found for this user.' }});
         switch(subCommand) {
           case 'add': {
+            if (member.id === interaction.member.id) return interaction.createFollowup({ embed: { description: 'You cannot warn yourself.' }});
             const significantDifference = this.client.utils.differRoles(interaction.member, member);
             if (!significantDifference) return interaction.createFollowup({ embed: { description: 'I cannot take action against this user due to them having a higher position than you.' }});
             
