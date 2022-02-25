@@ -10,10 +10,11 @@ module.exports = class Database {
 
     /**
      * Connects to the database and returns a client in the form of a Promise.
+     * @param { Function } func The function to run.
      * @returns { Promise } Returns a promise that resolves to the database client.
      */
-    async connect() {
-        return this.#prismaClient.$connect();
+    async fire(func) {
+        return this.#prismaClient[func]();
     }
 
     /**

@@ -67,6 +67,6 @@ module.exports = class SaurusNode extends Eris.Client {
         this.#loadEvents(join(__dirname, '../events'));
 
         init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV, attachStacktrace: true });
-        Promise.all([this.database.connect(), this.connect()]);
+        Promise.all([this.database.fire('$connect'), this.connect()]);
     }
 }

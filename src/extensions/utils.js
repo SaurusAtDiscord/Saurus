@@ -71,9 +71,12 @@ module.exports = class Utils {
      */
     differRoles(victim, differ) {
         if (victim.roles.length === 0 || differ.roles.length === 0) return true;
-        const highestRole = (m) => {
-            return m.roles.map(role => m.guild.roles.get(role))?.sort((a, b) => b.position - a.position)?.[0];
-        }
+
+        /**
+         * It takes a member object and returns the highest role that the member has.
+         * @param { Eris.Member } member The member object.
+         */
+        const highestRole = (member) => member.roles.map(role => member.guild.roles.get(role))?.sort((a, b) => b.position - a.position)?.[0];
         return highestRole(victim).position > highestRole(differ).position;
     }
 }

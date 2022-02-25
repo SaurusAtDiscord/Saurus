@@ -99,7 +99,7 @@ module.exports = class Warn extends Command {
           case 'list': {
             let description = '';
             
-            user.infractions.forEach(infraction => description += `**ID:** ${infraction.infractionId} | Issued By: <@${infraction.issuedBy}>\n\`${infraction.reason}\` - ${DateTime.fromMillis(infraction.createdAt).toFormat('DDD t')}\n\n`);
+            user.infractions.forEach(infraction => { description += `**ID:** ${infraction.infractionId} | Issued By: <@${infraction.issuedBy}>\n\`${infraction.reason}\` - ${DateTime.fromMillis(infraction.createdAt).toFormat('DDD t')}\n\n` });
             interaction.createFollowup({ embed: { author: { name: `${member.username}#${member.discriminator} | ${user.infractions.length} warning(s)`, icon_url: member.avatarURL }, description }});
             break;
           }
