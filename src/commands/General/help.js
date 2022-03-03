@@ -21,6 +21,18 @@ module.exports = class Help extends Command {
         });
     }
 
+    /**
+     * Create a usage string for a command
+     * @param { String } name The name of the command.
+     * @param { Array } options An array of objects that describe the options that the command accepts.
+     * @returns { String }The usage string.
+     */
+    createUsage(name, options) {
+        let usage = `**/**${name} `;
+        options?.forEach(option => { usage += option.required ? `[${option.name}]` : `(${option.name})` });
+        return usage;
+    }
+
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
         if (Object.keys(args).length === 0) {
@@ -35,7 +47,8 @@ module.exports = class Help extends Command {
             interaction.createFollowup({ 
                 embed: {
                     title: 'Help',
-                    description: `You can observe available categories by clicking the buttons below.`
+                    description: 'You can observe available categories by clicking the buttons below.',
+                    color: 0xCDE9F6
                 },
                 components: component.parse()
             });
@@ -55,7 +68,8 @@ module.exports = class Help extends Command {
                         title: is_category,
                         description: `This category consists of ${fields.length} commands.`,
                         fields,
-                        footer: { text: 'You can also use the help command to view info about a command!' }
+                        footer: { text: 'You can also use the help command to view info about a command!' },
+                        color: 0xCDE9F6
                     },
                     components: component.parse()
                 });
@@ -74,26 +88,40 @@ module.exports = class Help extends Command {
             return interaction.createFollowup({ embed: {
                 title: is_category,
                 description: `This category consists of ${fields.length} commands.`,
-                fields
+                fields,
+                color: 0xCDE9F6
             }});
         } else if (is_cmd) {
-            let usage = `**/**${is_cmd.name} `;
-            is_cmd.options?.forEach(option => { usage += option.required ? `[${option.name}]` : `(${option.name})` });
+            const usage = this.createUsage(is_cmd.name, is_cmd.options);
+
+            const [cmdName, ...cmdArgs] = usage.split(' ');
+            const subCommands = is_cmd.options?.filter(option => option.type === Constants.ApplicationCommandOptionTypes.SUB_COMMAND);
+
+            const userPermissionsStringed = Object.keys(is_cmd.subCommandUserPermissions).length ? 'Permissions may differ per sub-command' : is_cmd.userPermissions.join(', ');
+            const usageStringed = subCommands?.length ? 'This command contains sub-commands, check the embed below' : (cmdArgs[0]?.length ? `${cmdName} \`${cmdArgs}\`` : 'No usage-example');
             
-            usage = usage.split(' ');
-            const [cmdName, ...cmdArgs] = usage;
-            
-            return interaction.createFollowup({ embed: {
+            const embed = { embeds: [{
                 title: `${is_cmd.category} : ${this.client.stringUtils.upperFirst(is_cmd.name)}`,
                 fields: [
                     { name: 'Description', value: is_cmd.description ?? 'No description provided' },
-                    { name: 'Usage', value: cmdArgs ? `${cmdName} \`${cmdArgs}\`` : 'No usage-example provided' },
-                    { name: 'Permissions', value: `• User: \`${is_cmd.userPermissions?.join(', ') ?? 'None'}\`\n• Me: \`${is_cmd.clientPermissions?.join(', ') ?? 'None'}\`` }
+                    { name: 'Usage', value: usageStringed },
+                    { name: 'Permissions', value: `• User: \`${userPermissionsStringed}\`\n• Me: \`${is_cmd.clientPermissions.join(', ')}\`` }
                 ],
-                footer: { text: '[ ] = Required Arguments      ( ) = Optional Arguments' }
-            }});
+                footer: { text: '[ ] = Required Arguments      ( ) = Optional Arguments' },
+                color: 0xCDE9F6
+            }]}
+
+            if (subCommands?.length) embed.embeds.push({ title: 'Sub-Commands', fields: subCommands.map(sub => {
+                const usage = this.createUsage(`${is_cmd.name} ${sub.name}`, sub.options);
+                
+                const subPerms = is_cmd.subCommandUserPermissions[sub.name];
+                const [, subName, subArgs] = usage.match(/([a-z]+\s[a-z]+)\s(.+)/);
+                return { name: sub.name, value: `• Description: ${sub.description}\n• Usage: **/**${subName} \`${subArgs}\`\n• Permissions: \`${subPerms?.join(', ') ?? 'None'}\`` }
+            }), color: 0xCDE9F6 });
+            
+            return interaction.createFollowup(embed);
         }
 
-        return interaction.createFollowup({ embed: { description: `\`${args.command_or_category}\` **is not a valid command/category, try once more.**` }});
+        return interaction.createFollowup(this.client.utils.errorEmbed(`\`${args.command_or_category}\` **is not a valid command/category, try once more.**`));
     }
 }
