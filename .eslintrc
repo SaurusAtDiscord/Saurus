@@ -5,9 +5,10 @@
       "ecmaVersion": "latest",
       "sourceType": "module"
     },
-    "plugins": ["sonarjs"],
-    "extends": [
-      "eslint:recommended",
-      "plugin:sonarjs/recommended"
-    ]
+    "plugins": [ "sonarjs" ],
+    "extends": [ "eslint:recommended", "plugin:sonarjs/recommended" ],
+    "rules": {
+      "sonarjs/no-duplicate-string": 0,
+      "sonarjs/cognitive-complexity": ["error", 20]
+    }
 }
