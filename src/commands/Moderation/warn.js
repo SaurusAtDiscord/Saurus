@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 'use strict';
 
 const Command = require('@core/Command');
@@ -75,15 +74,15 @@ module.exports = class Warn extends Command {
 
         const member = await this.client.utils.getMember(guildId, args.target).catch(() => null);
         const user = (member && await this.client.database.getUser(`${args.target}:${guildId}`));
-        if (!user) return interaction.createFollowup({ embed: { description: 'Could not find provided user.' }});
-        if (member.bot) return interaction.createFollowup({ embed: { description: 'Bots do not have warning data.' }});
+        if (!user) return interaction.createFollowup(this.client.utils.errorEmbed('Could not find provided user.'));
+        if (member.bot) return interaction.createFollowup(this.client.utils.errorEmbed('Bots do not have warning data.'));
 
-        if (['list', 'remove', 'clear'].indexOf(subCommand) !== -1 && !user.infractions?.length) return interaction.createFollowup({ embed: { description: 'No warnings found for this user.' }});
+        if (['list', 'remove', 'clear'].indexOf(subCommand) !== -1 && !user.infractions?.length) return interaction.createFollowup(this.client.utils.errorEmbed('No warnings found for this user.'));
         switch(subCommand) {
           case 'add': {
-            if (member.id === interaction.member.id) return interaction.createFollowup({ embed: { description: 'You cannot warn yourself.' }});
+            if (member.id === interaction.member.id) return interaction.createFollowup(this.client.utils.errorEmbed('You cannot warn yourself.'));
             const significantDifference = this.client.utils.differRoles(interaction.member, member);
-            if (!significantDifference) return interaction.createFollowup({ embed: { description: 'I cannot take action against this user due to them having a higher position than you.' }});
+            if (!significantDifference) return interaction.createFollowup(this.client.utils.errorEmbed('I cannot take action against this user due to them having a higher position than you.'));
             
             await this.client.database.updateUser(`${args.target}:${guildId}`, {
                 infractions: { push: {
@@ -93,7 +92,7 @@ module.exports = class Warn extends Command {
                     createdAt: Date.now()
                 }}
             });
-            interaction.createFollowup({ embed: { description: `\`${member.username}#${member.discriminator}\` has been warned${args.reason ? (' for ' + args.reason) : '.'}` }});
+            interaction.createFollowup({ embed: { description: `\`${member.username}#${member.discriminator}\` has been warned${args.reason ? (' for ' + args.reason) : '.'}`, color: 0xCDE9F6 }});
             break;
           }
           case 'list': {
@@ -105,18 +104,18 @@ module.exports = class Warn extends Command {
           }
           case 'remove': {
             const infraction = user.infractions.findIndex(infrac => infrac.infractionId === args.id);
-            if (infraction === -1) return interaction.createFollowup({ embed: { description: `\`${args.id}\` is not a valid id.` }});
+            if (infraction === -1) return interaction.createFollowup(this.client.utils.errorEmbed(`\`${args.id}\` is not a valid id.`));
             
             await this.client.database.updateUser(`${args.target}:${guildId}`, { infractions: user.infractions.splice(infraction, 1) && user.infractions });
-            interaction.createFollowup({ embed: { description: `\`${member.username}#${member.discriminator}\`'s warning has been removed.` }});
+            interaction.createFollowup({ embed: { description: `\`${member.username}#${member.discriminator}\`'s warning has been removed.`, color: 0xCDE9F6 }});
             break;
           }
           case 'clear':
             await this.client.database.deleteUser(`${args.target}:${guildId}`);
-            interaction.createFollowup({ embed: { description: `\`${member.username}#${member.discriminator}\`'s warnings have been cleared.` }});
+            interaction.createFollowup({ embed: { description: `\`${member.username}#${member.discriminator}\`'s warnings have been cleared.`, color: 0xCDE9F6 }});
             break;
           default:
-            interaction.createFollowup({ embed: { description: 'Invalid sub-command.' }});
+            interaction.createFollowup(this.client.utils.errorEmbed('Invalid sub-command.'));
             break;
         }
     }

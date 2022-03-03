@@ -29,13 +29,13 @@ module.exports = class Mute extends Command {
         const guild = await this.client.utils.getGuild(interaction.guildID);
         const member = await this.client.utils.getMember(interaction.guildID, args.target).catch(() => null);
         
-        if (!member) return interaction.createFollowup({ embed: { description: 'Could not find provided user.' }});
-        if (member.bot) return interaction.createFollowup({ embed: { description: 'Muting a bot is not permitted.' }});
-        if (member.id === interaction.member.id) return interaction.createFollowup({ embed: { description: 'You cannot mute yourself.' }});
-        if (member.communicationDisabledUntil) return interaction.createFollowup({ embed: { description: 'This user is already muted.', footer: { text: 'If user "is already muted" but is false, manually mute and unmute them.' } }});
+        if (!member) return interaction.createFollowup(this.client.utils.errorEmbed('Could not find provided user.'));
+        if (member.bot) return interaction.createFollowup(this.client.utils.errorEmbed('Muting a bot is not permitted.'));
+        if (member.id === interaction.member.id) return interaction.createFollowup(this.client.utils.errorEmbed('You cannot mute yourself.'));
+        if (member.communicationDisabledUntil) return interaction.createFollowup(this.client.utils.errorEmbed('This user is already muted.'));
         
         const significantDifference = this.client.utils.differRoles(interaction.member, member);
-        if (!significantDifference) return interaction.createFollowup({ embed: { description: 'I cannot take action against this user due to them having a higher position than you.' }});
+        if (!significantDifference) return interaction.createFollowup(this.client.utils.errorEmbed('I cannot take action against this user due to them having a higher position than you.'));
 
         const identId = enc.randomUUID().substring(0, 5);
         const buttonHolder = new componentHelper();
@@ -57,15 +57,16 @@ module.exports = class Mute extends Command {
             maxMatches: 1,
             filter: i => (i.data.custom_id.match(/(?<iden>^id)(?<id>.{5})/).groups.id === identId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
         }).collectInteractions();
-        if (!choice.length) return interaction.editOriginalMessage({ embed: { description: 'You did not respond in time.' }, components: [] });
+        if (!choice.length) return interaction.editOriginalMessage(Object.assign(this.client.utils.errorEmbed('You did not respond in time.'), { components: [] }));
         const time = choice[0].interaction.data.custom_id.match(/(?<iden>time)(?<time>.+)/).groups.time;
 
         const success = await guild.editMember(member.id, { communicationDisabledUntil: new Date(Date.now() + (time_enums[time] * 1000)).toISOString() });
-        if (!success) return interaction.editOriginalMessage({ embed: { description: 'Could not mute user.' }, components: [] });
+        if (!success) return interaction.editOriginalMessage(Object.assign(this.client.utils.errorEmbed('Could not mute user.'), { components: [] }));
 
         return interaction.editOriginalMessage({ 
             embed: { 
-                description: `Successfully muted \`${member.username}#${member.discriminator}\` for **${time}**` 
+                description: `Successfully muted \`${member.username}#${member.discriminator}\` for **${time}**`,
+                color: 0xCDE9F6
             },
             components: []
         });

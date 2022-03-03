@@ -26,19 +26,19 @@ module.exports = class Unmute extends Command {
         const guild = await this.client.utils.getGuild(interaction.guildID);
         const member = await this.client.utils.getMember(interaction.guildID, args.target).catch(() => null);
         
-        if (!member) return interaction.createFollowup({ embed: { description: 'Could not find provided user.' }});
-        if (member.bot) return interaction.createFollowup({ embed: { description: 'Unmuting/muting a bot is not permitted.' }});
-        if (member.id === interaction.member.id) return interaction.createFollowup({ embed: { description: 'You cannot unmute yourself.' }});
-        if (!member.communicationDisabledUntil) return interaction.createFollowup({ embed: { description: 'This user is not muted.' }});
+        if (!member) return interaction.createFollowup(this.client.utils.errorEmbed('Could not find provided user.'));
+        if (member.bot) return interaction.createFollowup(this.client.utils.errorEmbed('Unmuting/muting a bot is not permitted.'));
+        if (member.id === interaction.member.id) return interaction.createFollowup(this.client.utils.errorEmbed('You cannot unmute yourself.'));
+        if (!member.communicationDisabledUntil) return interaction.createFollowup(this.client.utils.errorEmbed('This user is not muted.'));
 
         const success = await guild.editMember(member.id, { communicationDisabledUntil: null });
-        if (!success) return interaction.editOriginalMessage({ embed: { description: 'Could not unmute user.' }, components: [] });
+        if (!success) return interaction.editOriginalMessage(this.client.utils.errorEmbed('Could not unmute user.'));
 
         return interaction.editOriginalMessage({ 
             embed: { 
-                description: `Successfully unmuted \`${member.username}#${member.discriminator}\`` 
+                description: `Successfully unmuted \`${member.username}#${member.discriminator}\`` ,
+                color: 0xCDE9F6
             },
-            components: []
         });
     }
 }

@@ -9,6 +9,20 @@ module.exports = class Utils {
     }
 
     /**
+     * It returns an embed object with the title set to "Error" and the description set to the error
+     * message.
+     * @param { String } error The error message to display.
+     * @returns { Object } The errorEmbed function returns an object with an embed property.
+     */
+    errorEmbed(error) {
+        return { embed: {
+            title: 'Error',
+            description: error,
+            color: 0xec7373
+        }};
+    }
+
+    /**
      * Create a Command.
      * @param { Array } context The context of the command.
      */
@@ -63,20 +77,23 @@ module.exports = class Utils {
     }
 
     /**
+     * It takes a member object and returns the highest role that the member has.
+     * @param { Eris.Member } member The member object.
+    */
+    highestRole(member) {
+        if (member.roles.length === 0) return;
+        return member.roles.map(role => member.guild.roles.get(role))?.sort((a, b) => b.position - a.position)?.[0];
+    }
+    
+    /**
      * If the victim has no roles, or the differ has no roles, return true. If the victim has a higher role
      * than the differ, return false
      * @param { Eris.Member } victim The user to check.
      * @param { Eris.Member } differ The user to check against.
-     * @returns { Boolean} Whether or not the victim has a higher role than the differ.
+     * @returns { Boolean } Whether or not the victim has a higher role than the differ.
      */
     differRoles(victim, differ) {
-        if (victim.roles.length === 0 || differ.roles.length === 0) return true;
-
-        /**
-         * It takes a member object and returns the highest role that the member has.
-         * @param { Eris.Member } member The member object.
-         */
-        const highestRole = (member) => member.roles.map(role => member.guild.roles.get(role))?.sort((a, b) => b.position - a.position)?.[0];
-        return highestRole(victim).position > highestRole(differ).position;
+        const guildOwner = victim.guild.ownerID;
+        return (victim.id === guildOwner && differ.id !== guildOwner) || this.highestRole(victim)?.position > this.highestRole(differ)?.position;
     }
 }
