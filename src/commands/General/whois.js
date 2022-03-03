@@ -40,7 +40,7 @@ module.exports = class Whois extends Command {
                 }
             ],
             thumbnail: { url: user.avatarURL },
-            color: roles.length && roles[0].color
+            color: roles.length && roles[0]?.color
         }});
     }
 }
