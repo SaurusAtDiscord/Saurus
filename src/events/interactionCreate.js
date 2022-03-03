@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 'use strict';
 
 const Event = require('@core/Event');
@@ -8,6 +7,7 @@ module.exports = class interactionCreate extends Event {
 
     /* Calling the method "execute" on Event class. */
     async execute(interaction) {
+        if (interaction.type !== Constants.InteractionTypes.MODAL_SUBMIT)
         await interaction.acknowledge(interaction.data.name === 'help' && Constants.MessageFlags.EPHEMERAL);
 
         if (interaction.type === Constants.InteractionTypes.APPLICATION_COMMAND) {
@@ -17,8 +17,8 @@ module.exports = class interactionCreate extends Event {
                 const clientChannelPermissions = interaction.channel.permissionsOf(this.client.user.id);
                 const userChannelPermissions = interaction.channel.permissionsOf(interaction.member.id);
 
-                const clientPermissions = command.clientPermissions?.filter(p => !clientChannelPermissions?.has(p));
-                const userPermissions = command.userPermissions?.filter(p => !userChannelPermissions?.has(p));
+                const clientPermissions = command.clientPermissions.filter(p => !clientChannelPermissions?.has(p));
+                const userPermissions = command.userPermissions.filter(p => !userChannelPermissions?.has(p));
 
                 const subCommand = interaction.data.options?.[0].name;
                 const subCommandUserPermissions = command.subCommandUserPermissions[subCommand]?.filter(p => !userChannelPermissions?.has(p));
@@ -30,12 +30,15 @@ module.exports = class interactionCreate extends Event {
                 }});
             }
 
-            const data = {};
+            const data = {}
             interaction.data.options?.forEach(input => {
                 switch (input.type) {
-                  case Constants.ApplicationCommandOptionTypes.SUB_COMMAND_GROUP: // FIXME: Sub command group is not a value.
-                    input.options.forEach(subGroup => subGroup.options?.forEach(subInput => { data[subInput.name] = subInput.value }));
+                  case Constants.ApplicationCommandOptionTypes.SUB_COMMAND_GROUP: {
+                    const args = {}
+                    input.options?.forEach(subGroup => subGroup.options?.forEach(subInput => { args[subInput.name] = subInput.value }));
+                    Object.assign(data, { subGroup: input.name, subCommand: input.options?.[0].name, args });
                     break;
+                  }
                   case Constants.ApplicationCommandOptionTypes.SUB_COMMAND: {
                     const args = {}
                     input.options?.forEach(subInput => { args[subInput.name] = subInput.value });
