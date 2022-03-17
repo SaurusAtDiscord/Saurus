@@ -1,7 +1,10 @@
 {
   "dependencies": {
     "@prisma/client": "^3.11.0-dev.1",
+    "@scrapingant/amazon-proxy-scraper": "^2.1.0",
     "@sentry/node": "^6.17.7",
+    "@types/node": "^17.0.21",
+    "cheerio": "^1.0.0-rc.10",
     "dotenv": "^16.0.0",
     "eris": "Spencer-0003/eris#everything",
     "fs": "^0.0.1-security",
@@ -11,6 +14,7 @@
     "nodemon": "^2.0.15",
     "path": "^0.12.7",
     "pretty-ms": "^7.0.1",
+    "unofficial-amazon-search": "^2.0.8",
     "yarn": "^1.22.17"
   },
   "optionalDependencies": {
@@ -26,6 +30,7 @@
   "_moduleAliases": {
     "@core": "src/core",
     "@units": "src/units",
+    "@events": "src/events",
     "@extensions": "src/extensions"
   }
 }

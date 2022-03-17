@@ -6,7 +6,7 @@ module.exports = class Membercount extends Command {
     constructor(client) {
         super(client, {
             name: 'membercount',
-            description: 'Statistics of the amount of members & bots'
+            description: 'Statistics of the amount of members, bots, and total'
         });
     }
 
@@ -17,7 +17,8 @@ module.exports = class Membercount extends Command {
 
         return interaction.createFollowup({ embed: { fields: [
             { name: 'Members', value: members.filter(m => !m.bot).length, inline: true },
-            { name: 'Bots', value: members.filter(m => m.bot).length, inline: true }
+            { name: 'Bots', value: members.filter(m => m.bot).length, inline: true },
+            { name: 'Total', value: members.length, inline: true }
         ]}});
     }
 }

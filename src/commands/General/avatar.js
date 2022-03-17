@@ -7,11 +7,11 @@ module.exports = class Avatar extends Command {
     constructor(client) {
         super(client, {
             name: 'avatar',
-            description: 'Get a users avatar',
+            description: 'Get a members avatar',
             
             options: [{
-                'name': 'user',
-                'description': 'Fetch this users avatar',
+                'name': 'member',
+                'description': 'Fetch this members avatar',
                 'type': Constants.ApplicationCommandOptionTypes.USER
             }]
         });
@@ -19,7 +19,7 @@ module.exports = class Avatar extends Command {
 
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
-        const user = (args.user && await this.client.utils.getMember(interaction.guildID, args.user).catch(() => null)) ?? interaction.member;
+        const user = (args.member && await this.client.utils.getMember(interaction.guildID, args.member).catch(() => null)) ?? interaction.member;
 
         return interaction.createFollowup({ embed: {
             title: `${user.username}#${user.discriminator}'s Avatar`,

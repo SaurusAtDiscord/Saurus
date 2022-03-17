@@ -25,9 +25,9 @@ module.exports = class SaurusNode extends Eris.Client {
             disableEvents: { TYPING_START: true }
         });
          
-        this.commands = [ ]
-        this.categories = [ ]
-        
+        this.commands = []
+        this.categories = []
+
         this.database = new (require('@units/databasehandler'));
         this.utils = new (require('@extensions/utils'))(this);
         this.stringUtils = require('@extensions/stringUtils');
@@ -47,7 +47,7 @@ module.exports = class SaurusNode extends Eris.Client {
     }
 
     /**
-     * Load all the JavaScript files in the `events` directory and execute them.
+     * Load all the JavaScript files in the events directory and execute them.
      * @param { String } dir The directory to load events from.
      */
     #loadEvents(dir) {        

@@ -79,10 +79,10 @@ module.exports = class Utils {
     /**
      * It takes a member object and returns the highest role that the member has.
      * @param { Eris.Member } member The member object.
+     * @returns { Eris.Role } The highest role that the member has.
     */
     highestRole(member) {
-        if (member.roles.length === 0) return;
-        return member.roles.map(role => member.guild.roles.get(role))?.sort((a, b) => b.position - a.position)?.[0];
+        return member?.roles.map(role => member?.guild.roles.get(role))?.sort((a, b) => b.position - a.position)?.[0];
     }
     
     /**
@@ -94,6 +94,10 @@ module.exports = class Utils {
      */
     differRoles(victim, differ) {
         const guildOwner = victim.guild.ownerID;
-        return (victim.id === guildOwner && differ.id !== guildOwner) || this.highestRole(victim)?.position > this.highestRole(differ)?.position;
+        const isGuildOwner = victim?.id === guildOwner && differ?.id !== guildOwner;
+        const hasAdministrator = differ?.permissions.has('administrator');
+        const higherRole = this.highestRole(victim)?.position > this.highestRole(differ)?.position;
+        
+        return isGuildOwner || hasAdministrator || higherRole;
     }
 }

@@ -13,3 +13,9 @@ model User {
   uuid        String @unique
   infractions Json[]
 }
+
+model Guild {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  guildId     String @unique
+  modules     Json @default("{ \"modLogs\": false }")
+}

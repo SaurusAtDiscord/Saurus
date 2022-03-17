@@ -14,9 +14,9 @@ module.exports = class Help extends Command {
             description: 'Provides bot assets or basic information',
             
             options: [{
-                'name': 'command_or_category',
-                'description': 'Get information on a specific command or category',
-                'type': Constants.ApplicationCommandOptionTypes.STRING
+                name: 'command_or_category',
+                description: 'Get information on a specific command or category',
+                type: Constants.ApplicationCommandOptionTypes.STRING
             }]
         });
     }
@@ -25,7 +25,7 @@ module.exports = class Help extends Command {
      * Create a usage string for a command
      * @param { String } name The name of the command.
      * @param { Array } options An array of objects that describe the options that the command accepts.
-     * @returns { String }The usage string.
+     * @returns { String } The usage string.
      */
     createUsage(name, options) {
         let usage = `**/**${name} `;
@@ -40,9 +40,8 @@ module.exports = class Help extends Command {
             const uniId = enc.randomUUID().substring(0, 5);
 
             this.client.categories.forEach(category => component.createButton(category, Constants.ButtonStyles.SECONDARY, `${uniId} ${interaction.member.id} ${category}`));
-            
             component.createRow();
-            component.createButton('Our Discord', Constants.ButtonStyles.LINK, 'https://discord.gg/DEHSHTEj3h');
+            component.createButton('Support', Constants.ButtonStyles.LINK, 'https://discord.gg/DEHSHTEj3h');
 
             interaction.createFollowup({ 
                 embed: {
@@ -60,7 +59,7 @@ module.exports = class Help extends Command {
             return collector.on('collect', res => {
                 const data = res.data.custom_id;
                 const is_category = this.client.categories.find(category => category === data.split(' ')[2]);
-                const fields = this.client.commands.filter(cmd => cmd.category === is_category).map(cmd => { return { name: cmd.name, value: cmd.description }});
+                const fields = this.client.commands.filter(cmd => cmd.category === is_category).map(cmd => ({ name: cmd.name, value: cmd.description }));
 
                 component.disable(data);
                 interaction.editOriginalMessage({ 
@@ -84,7 +83,7 @@ module.exports = class Help extends Command {
         const is_category = this.client.categories.find(category => category.toLowerCase() === args.command_or_category.toLowerCase());
         
         if (is_category) {
-            const fields = this.client.commands.filter(cmd => cmd.category === is_category).map(cmd => { return { name: cmd.name, value: cmd.description }});
+            const fields = this.client.commands.filter(cmd => cmd.category === is_category).map(cmd => ({ name: cmd.name, value: cmd.description }));
             return interaction.createFollowup({ embed: {
                 title: is_category,
                 description: `This category consists of ${fields.length} commands.`,
@@ -112,11 +111,13 @@ module.exports = class Help extends Command {
             }]}
 
             if (subCommands?.length) embed.embeds.push({ title: 'Sub-Commands', fields: subCommands.map(sub => {
-                const usage = this.createUsage(`${is_cmd.name} ${sub.name}`, sub.options);
-                
+                const subUsage = this.createUsage(`${is_cmd.name} ${sub.name}`, sub.options);
+
                 const subPerms = is_cmd.subCommandUserPermissions[sub.name];
-                const [, subName, subArgs] = usage.match(/([a-z]+\s[a-z]+)\s(.+)/);
-                return { name: sub.name, value: `• Description: ${sub.description}\n• Usage: **/**${subName} \`${subArgs}\`\n• Permissions: \`${subPerms?.join(', ') ?? 'None'}\`` }
+                const [, subName, subArgs] = subUsage.match(/^(.{5}\w+ \w+)\s(.+)/i);
+                console.log(subUsage.match(/^(.{5}\w+ \w+)\s(.+)/i));
+                
+                return { name: sub.name, value: `• Description: ${sub.description}\n• Usage: ${subName} \`${subArgs}\`\n• Permissions: \`${subPerms?.join(', ') ?? 'None'}\`` }
             }), color: 0xCDE9F6 });
             
             return interaction.createFollowup(embed);

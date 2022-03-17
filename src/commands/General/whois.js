@@ -8,38 +8,38 @@ module.exports = class Whois extends Command {
     constructor(client) {
         super(client, {
             name: 'whois',
-            description: 'Gives information about the provided user',
+            description: 'Gives information about the provided member',
             
             options: [{
-                'name': 'user',
-                'description': 'Get information on a specific user',
-                'type': Constants.ApplicationCommandOptionTypes.USER
+                name: 'member',
+                description: 'Get information on a specific member',
+                type: Constants.ApplicationCommandOptionTypes.USER
             }]
         });
     }
 
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
-        const user = (args.user && await this.client.utils.getMember(interaction.guildID, args.user).catch(() => null)) ?? interaction.member;
-        const roles = user.roles && user.roles.map(role => user.guild.roles.get(role)).sort((a, b) => b.position - a.position);
+        const member = (args.member && await this.client.utils.getMember(interaction.guildID, args.member).catch(() => null)) ?? interaction.member;
+        const roles = member.roles && member.roles.map(role => member.guild.roles.get(role)).sort((a, b) => b.position - a.position);
         const stringedMappedRoles = roles.map(role => `<@&${role.id}>`);
         const stringedRole = stringedMappedRoles.length ? `\n• Roles: ${stringedMappedRoles.join(' ')}` : '';
         
-        const joinedAt = DateTime.fromMillis(user.joinedAt);
-        const createdAt = DateTime.fromMillis(user.createdAt);
+        const joinedAt = DateTime.fromMillis(member.joinedAt);
+        const createdAt = DateTime.fromMillis(member.createdAt);
         return interaction.createFollowup({ embed: {
-            author: { name: `${user.username}#${user.discriminator}`, icon_url: user.avatarURL },
+            author: { name: `${member.username}#${member.discriminator}`, icon_url: member.avatarURL },
             fields: [
                 {
                     name: 'Guild Details',
-                    value: `• Nickname: ${user.nick ?? 'No Nickname'}\n• Joined at: ${joinedAt.toFormat('DDD t')} (\`${joinedAt.toRelative()}\`)${stringedRole}`
+                    value: `• Nickname: ${member.nick ?? 'No Nickname'}\n• Joined at: ${joinedAt.toFormat('DDD t')} (\`${joinedAt.toRelative()}\`)${stringedRole}`
                 },
                 {
                     name: 'User Details',
-                    value: `• Identity: ${user.username}#${user.discriminator} (\`${user.id}\`)\n• Registered: ${createdAt.toFormat('DDD t')} (\`${createdAt.toRelative()}\`)`
+                    value: `• Identity: ${member.username}#${member.discriminator} (\`${member.id}\`)\n• Registered: ${createdAt.toFormat('DDD t')} (\`${createdAt.toRelative()}\`)`
                 }
             ],
-            thumbnail: { url: user.avatarURL },
+            thumbnail: { url: member.avatarURL },
             color: roles.length && roles[0]?.color
         }});
     }

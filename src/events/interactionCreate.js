@@ -8,7 +8,7 @@ module.exports = class interactionCreate extends Event {
     /* Calling the method "execute" on Event class. */
     async execute(interaction) {
         if (interaction.type !== Constants.InteractionTypes.MODAL_SUBMIT)
-        await interaction.acknowledge(interaction.data.name === 'help' && Constants.MessageFlags.EPHEMERAL);
+        await interaction.acknowledge((interaction.data.name === 'help' || interaction.data.options?.[0].name === 'list') && Constants.MessageFlags.EPHEMERAL);
 
         if (interaction.type === Constants.InteractionTypes.APPLICATION_COMMAND) {
             const command = this.client.commands.find(cmd => cmd.name === interaction.data.name.toLowerCase());
