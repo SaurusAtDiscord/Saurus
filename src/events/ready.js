@@ -19,8 +19,8 @@ module.exports = class ready extends Event {
 		if (changedCommands.length) changedCommands.forEach(command => this.client.utils.editCommand(this.client.commands.find(cmd => cmd.name === command.name), command.id));
 
 		console.log(`[${this.client.user.username}] Online~!`);
-		setInterval(() => {
-            const statuses = [ `over ${this.client.guilds.size ?? 'NaN'} guilds`, 'zzz' ]
+		setInterval(async () => {
+            const statuses = [ `over ${(await this.client.getRESTGuilds()).length ?? 'NaN'} guilds`, 'zzz' ]
             this.client.editStatus('idle', {
                 name: `${statuses[Math.floor(Math.random() * statuses.length)]}`,
                 type: Constants.ActivityTypes.WATCHING

@@ -5,11 +5,14 @@ const { Constants } = require('eris');
 module.exports = class ModLogs {
     constructor(client, data) {
         this.client = client;
-        this.data = data;
         this.interaction = data.interaction;
         this.guildId = data.interaction.guildID;
     }
 
+    /**
+     * Creates a channel called "mod-logs" if it doesn't exist, and then returns the channel object.
+     * @returns { Eris.Channel } The channel object.
+     */
     async #getPostChannel() {
         const guild = await this.client.utils.getGuild(this.guildId);
         const modLogChannel = guild.channels.find(channel => channel.name === 'mod-logs');
@@ -24,29 +27,34 @@ module.exports = class ModLogs {
         }));
     }
 
+    /**
+     * Gets the webhook for the post channel, or creates one if it doesn't exist
+     * @return { Eris.Webhook } The webhook object.
+     */
     async #getWebhook() {
         const channel = await this.#getPostChannel();
-        let webhook = await channel.getWebhooks();
-        webhook = webhook.find(w => w.name === 'ᴹᵒᵈᴸᵒᵍˢ');
-
+        const webhook = (await channel.getWebhooks()).find(w => w.name === 'ᴹᵒᵈᴸᵒᵍˢ');
         return webhook ?? channel.createWebhook({ name: 'ᴹᵒᵈᴸᵒᵍˢ' }, 'No previous webhooks existed.');
     }
 
+    /**
+     * Returns whether the modlogs module is enabled for this guild or not.
+     * @return { Promise<Boolean> } Whether the modlogs module is enabled for this guild or not.
+     */
     async modLogsEnabled() {
-        return (await this.client.database.getGuild(this.guildId)).modules.modLogs;
+        return (await this.client.database.getGuild(this.guildId))?.modules.modLogs;
     }
 
-    async postModLog(message) {
-        const guilty = this.data.guilty;
-        const guiltyText = guilty ? `\n• Action Against: \`${guilty.username}#${guilty.discriminator}\`` : '';
-
-        this.#getWebhook()?.then(webhook => this.client.executeWebhook(webhook.id, webhook.token, { embed: {
-            author: { name: 'Moderation Log', icon_url: (guilty ?? this.interaction.member).avatarURL },
-            description: message,
-            fields : [{
-                name: 'Information',
-                value: `• Moderator: \`${this.interaction.member.username}#${this.interaction.member.discriminator}\`${guiltyText}`,
-            }]
+    /**
+     * Send a mod log to the mod log channel
+     * @param { String } text The text to send to the modlog.
+     */
+    async postModLog(text, info) {
+        if (!await this.modLogsEnabled()) return;
+        this.#getWebhook()?.then(webhook => this.client.executeWebhook(webhook?.id, webhook?.token, { embed: {
+            author: { name: 'Moderation Log' },
+            description: text,
+            fields : [info]
         }}));
     }
 }

@@ -1,11 +1,10 @@
 'use strict';
 
 const Command = require('@core/Command');
-const ButtonHelper = require('@units/ComponentHandler');
-const InteractionCollector = require('@units/InteractionCollector');
-
 const { Constants } = require('eris');
-const enc = require('crypto');
+const { randomUUID } = require('crypto');
+const button = require('@units/ComponentHandler');
+const collector = require('@units/InteractionCollector');
 
 module.exports = class Help extends Command {
     constructor(client) {
@@ -35,9 +34,9 @@ module.exports = class Help extends Command {
 
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
-        if (Object.keys(args).length === 0) {
-            const component = new ButtonHelper();
-            const uniId = enc.randomUUID().substring(0, 5);
+        if (!Object.keys(args).length) {
+            const component = new button();
+            const uniId = randomUUID().substring(0, 5);
 
             this.client.categories.forEach(category => component.createButton(category, Constants.ButtonStyles.SECONDARY, `${uniId} ${interaction.member.id} ${category}`));
             component.createRow();
@@ -52,11 +51,10 @@ module.exports = class Help extends Command {
                 components: component.parse()
             });
             
-            const collector = await new InteractionCollector(this.client, {
+            return new collector(this.client, {
                 time: 60000,
                 filter: i => (i.data.custom_id.split(' ')[0] === uniId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
-            });
-            return collector.on('collect', res => {
+            }).on('collect', res => {
                 const data = res.data.custom_id;
                 const is_category = this.client.categories.find(category => category === data.split(' ')[2]);
                 const fields = this.client.commands.filter(cmd => cmd.category === is_category).map(cmd => ({ name: cmd.name, value: cmd.description }));
@@ -73,7 +71,7 @@ module.exports = class Help extends Command {
                     components: component.parse()
                 });
             })
-            .on('end', () => {
+            .once('end', () => {
                 component.disable('all');
                 interaction.editOriginalMessage({ components: component.parse() });
             });
@@ -115,11 +113,8 @@ module.exports = class Help extends Command {
 
                 const subPerms = is_cmd.subCommandUserPermissions[sub.name];
                 const [, subName, subArgs] = subUsage.match(/^(.{5}\w+ \w+)\s(.+)/i);
-                console.log(subUsage.match(/^(.{5}\w+ \w+)\s(.+)/i));
-                
                 return { name: sub.name, value: `• Description: ${sub.description}\n• Usage: ${subName} \`${subArgs}\`\n• Permissions: \`${subPerms?.join(', ') ?? 'None'}\`` }
             }), color: 0xCDE9F6 });
-            
             return interaction.createFollowup(embed);
         }
 

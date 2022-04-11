@@ -1,9 +1,6 @@
 'use strict';
 
 module.exports = class Utils {
-    /**
-     * @param { Eris.Client } client The client.
-     */
     constructor(client) {
         this.client = client;
     }
@@ -16,9 +13,8 @@ module.exports = class Utils {
      */
     errorEmbed(error) {
         return { embed: {
-            title: 'Error',
             description: error,
-            color: 0xec7373
+            color: 0xFF6961
         }};
     }
 
@@ -82,22 +78,22 @@ module.exports = class Utils {
      * @returns { Eris.Role } The highest role that the member has.
     */
     highestRole(member) {
-        return member?.roles.map(role => member?.guild.roles.get(role))?.sort((a, b) => b.position - a.position)?.[0];
+        return member?.roles?.map(role => member?.guild?.roles?.get(role))?.sort((a, b) => b?.position - a?.position)?.[0];
     }
     
     /**
      * If the victim has no roles, or the differ has no roles, return true. If the victim has a higher role
      * than the differ, return false
-     * @param { Eris.Member } victim The user to check.
-     * @param { Eris.Member } differ The user to check against.
+     * @param { Eris.Member } member1 The user to check.
+     * @param { Eris.Member } member2 The user to check against.
      * @returns { Boolean } Whether or not the victim has a higher role than the differ.
      */
-    differRoles(victim, differ) {
-        const guildOwner = victim.guild.ownerID;
-        const isGuildOwner = victim?.id === guildOwner && differ?.id !== guildOwner;
-        const hasAdministrator = differ?.permissions.has('administrator');
-        const higherRole = this.highestRole(victim)?.position > this.highestRole(differ)?.position;
-        
-        return isGuildOwner || hasAdministrator || higherRole;
+    superior(member1, member2) {
+        const guildOwner = member1?.guild?.ownerID;
+
+        const isGuildOwner = (member1?.id === guildOwner && member2?.id !== guildOwner);
+        const hasAdministrator = member1?.permissions?.has('administrator');
+        const higherRole = this.highestRole(member1)?.position <= this.highestRole(member2)?.position;
+        return isGuildOwner || higherRole || hasAdministrator;
     }
 }

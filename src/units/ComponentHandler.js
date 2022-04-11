@@ -34,15 +34,15 @@ module.exports = class ButtonHelper { // Credit to Spencer0003 and DonovanDMC
 
     /**
      * Disable all the components in the form.
-     * @param { String } input The component to disable. Provide all to disable all components(buttons) or a custom_id.
+     * @param { String } input Provide all to disable all components(buttons) or a custom_id.
      */
     disable(input) {
         this.rows.forEach(row => row.components.forEach(component => { component.disabled = (input === 'all' || component.custom_id === input) }));
     }
 
     /**
-     * Remove empty rows from the table.
-     * @returns { Array } The parsed rows.
+     * Return the components inside of the rows array.
+     * @returns { Array } The parsed and cleansed rows.
      */
     parse() {
         this.#removeEmptyRows();
@@ -53,22 +53,17 @@ module.exports = class ButtonHelper { // Credit to Spencer0003 and DonovanDMC
      * Create a button.
      * @param { String } label The text to display on the button.
      * @param { Number } style The style of the button.
-     * @param { String } custom_id A custom ID for the button. This is used to identify the button in the callback.
-     * @param { String } emoji The emoji to use for the button.
-     * @param { Boolean|undefined } [disabled=false] The choice of disabling the button.
+     * @param { String } custom_id A custom ID for the button. This is used to identify the button in callback.
+     * @param { String } [emoji] The emoji to use for the button.
+     * @param { Boolean } [disabled] The choice of disabling the button.
      */
-    createButton(label, style, custom_id, emoji, disabled = false) {    
+    createButton(label, style, custom_id, emoji, disabled) {
         this.#addRowIfRequired();
-        this.rows[this.rows.length - 1].components.push(style === Constants.ButtonStyles.LINK ? {
+        this.rows[this.rows.length - 1].components.push({
             type: Constants.ComponentTypes.BUTTON,
             label,
             style,
-            url: custom_id
-        } : {
-            type: Constants.ComponentTypes.BUTTON,
-            label,
-            style,
-            custom_id,
+            [style === Constants.ButtonStyles.LINK ? 'url' : 'custom_id']: custom_id,
             emoji,
             disabled
         });

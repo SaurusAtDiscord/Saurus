@@ -20,7 +20,8 @@ module.exports = class Whois extends Command {
 
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
-        const member = (args.member && await this.client.utils.getMember(interaction.guildID, args.member).catch(() => null)) ?? interaction.member;
+        const member = interaction.data.resolved?.members?.get(args.member) ?? interaction.member;
+        
         const roles = member.roles && member.roles.map(role => member.guild.roles.get(role)).sort((a, b) => b.position - a.position);
         const stringedMappedRoles = roles.map(role => `<@&${role.id}>`);
         const stringedRole = stringedMappedRoles.length ? `\n• Roles: ${stringedMappedRoles.join(' ')}` : '';

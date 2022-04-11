@@ -2,6 +2,7 @@
 
 const Command = require('@core/Command');
 const { Constants } = require('eris');
+
 const { DateTime } = require('luxon');
 
 module.exports = class Serverinfo extends Command {
@@ -14,12 +15,12 @@ module.exports = class Serverinfo extends Command {
 
     /* Adding the method "execute" on Command class. */
     async execute(interaction) {
-        const guild = await this.client.utils.getGuild(interaction.guildID);
+        const guild = interaction.member.guild;
         const guildOwner = await this.client.utils.getUser(guild.ownerID);
         const members = await guild.fetchMembers();
 
-        const roles = guild.roles.map(role => role).sort((a, b) => b.position - a.position).filter(role => role.name !== '@everyone');
-        const stringedRoles = roles.map(role => `<@&${role.id}>`);
+        const roles = guild.roles?.map(role => role)?.sort((a, b) => b?.position - a?.position).filter(role => role?.name !== '@everyone');
+        const stringedRoles = roles?.map(role => `<@&${role?.id}>`);
 
         const createdAt = DateTime.fromMillis(guild.createdAt);
         return interaction.createFollowup({ embed: {

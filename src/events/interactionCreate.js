@@ -12,7 +12,6 @@ module.exports = class interactionCreate extends Event {
 
         if (interaction.type === Constants.InteractionTypes.APPLICATION_COMMAND) {
             const command = this.client.commands.find(cmd => cmd.name === interaction.data.name.toLowerCase());
-            
             if (command.clientPermissions || command.userPermissions || command.subCommandUserPermissions) {
                 const clientChannelPermissions = interaction.channel.permissionsOf(this.client.user.id);
                 const userChannelPermissions = interaction.channel.permissionsOf(interaction.member.id);
@@ -20,14 +19,11 @@ module.exports = class interactionCreate extends Event {
                 const clientPermissions = command.clientPermissions.filter(p => !clientChannelPermissions?.has(p));
                 const userPermissions = command.userPermissions.filter(p => !userChannelPermissions?.has(p));
 
-                const subCommand = interaction.data.options?.[0].name;
+                const subCommand = interaction.data.options?.[0]?.name;
                 const subCommandUserPermissions = command.subCommandUserPermissions[subCommand]?.filter(p => !userChannelPermissions?.has(p));
 
                 const missing = (subCommandUserPermissions ?? userPermissions ?? clientPermissions);
-                if (missing?.length) return interaction.createFollowup({ embed: {
-                    author: { name: `${this.client.stringUtils.upperFirst(command.name)}  ―  Lacking Permissions`, icon_url: interaction.member.avatarURL, },
-                    description: `${clientPermissions?.length ? 'I' : 'You'} do not have the required permissions to preform this command.\n\`${missing.join(', ')}\``
-                }});
+                if (missing?.length) return interaction.createFollowup(this.client.utils.errorEmbed(`${clientPermissions?.length ? 'I' : 'You'} do not have the required permissions to preform this command.\n\`${missing.join(', ')}\``));
             }
 
             const data = {}
@@ -36,12 +32,12 @@ module.exports = class interactionCreate extends Event {
                   case Constants.ApplicationCommandOptionTypes.SUB_COMMAND_GROUP: {
                     const args = {}
                     input.options?.forEach(subGroup => subGroup.options?.forEach(subInput => { args[subInput.name] = subInput.value }));
-                    Object.assign(data, { subGroup: input.name, subCommand: input.options?.[0].name, args });
+                    Object.assign(data, { subGroup: input.name, subCommand: input.options?.[0]?.name, args });
                     break;
                   }
                   case Constants.ApplicationCommandOptionTypes.SUB_COMMAND: {
                     const args = {}
-                    input.options?.forEach(subInput => { args[subInput.name] = subInput.value });
+                    input.options?.forEach(subInput => { args[subInput.name] = subInput.value});
                     Object.assign(data, { subCommand: input.name, args });
                     break;
                   }

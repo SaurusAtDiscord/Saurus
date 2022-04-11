@@ -21,26 +21,22 @@ module.exports = class Amazon extends Command {
     }
 
     /* Calling the method "execute" on Command class. */
-    async execute(interaction, args) {
-        let queryFor = await searchAmazon(args.query, { includeSponsoredResults: false });
+    async execute(interaction, { query }) {
+        let queryFor = (await searchAmazon(query, { includeSponsoredResults: false }))?.searchResults;
         if (!queryFor) return interaction.createFollowup(this.client.utils.errorEmbed('Could not find any results based on what you searched.'));
-        queryFor = queryFor.searchResults;
         
         const oldLength = queryFor.length;
-        const title = args.query.length >= 125 ? (args.query.substring(0, 125) + '...') : args.query;
+        const title = query.length >= 125 ? (query.substring(0, 125) + '...') : query;
         
         if (queryFor.length > 5) queryFor = queryFor.slice(0, 5);
         return interaction.createFollowup({ embed: {
             title: `Results for ${title}`,
-            description: `Found \`${oldLength}\` results, only displaying \`5\` of them, some results may not be relevant.`,
-            fields: queryFor.map(product => {
-                if (product.rating.score < 0) product.rating.score = 0;
-                return {
-                    name: product.title,
-                    value: `[WebPage](https://amazon.com${product.productUrl})\n• Rating: \`${product.rating.score}/5\``
-                }
-            }),
-            image: { url: queryFor[0]?.imageUrl },
+            description: `Found \`${oldLength}\` results, only displaying \`5\`, some results may not be relevant.`,
+            fields: queryFor.map(product => ({
+                name: product.title,
+                value: `[WebPage](https://amazon.com${product.productUrl})\n• Rating: \`${Math.max(0, Math.min(product.rating.score, 5))}/5\``
+            })),
+            image: { url: queryFor[0]?.imageUrl }
         }});
     }
 }

@@ -12,6 +12,6 @@ module.exports = class Ping extends Command {
 
     /* Calling the method "execute" on Command class. */
     execute(interaction) {
-        return interaction.createFollowup({ embed: { description: `Pong! \`${interaction.member ? interaction.member.guild.shard.latency : 'NaN'} ms\`` }});
+        return interaction.createFollowup({ embed: { description: `Pong! \`${interaction.member?.guild?.shard?.latency ?? 'NaN'} ms\`` }});
     }
 }

@@ -1,11 +1,15 @@
 datasource db {
-  url      = env("DATABASE_URL")
-  provider = "mongodb"
+  url        = env("DATABASE_URL")
+  provider   = "mongodb"
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["mongoDb"]
+  provider   = "prisma-client-js"
+}
+
+enum BlacklistType {
+  GUILD
+  USER
 }
 
 model User {
@@ -18,4 +22,12 @@ model Guild {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   guildId     String @unique
   modules     Json @default("{ \"modLogs\": false }")
+}
+
+model Blacklist {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  fingerPrint String
+  type        BlacklistType
+  reason      String?
+  moderator   String?
 }
