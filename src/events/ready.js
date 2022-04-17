@@ -20,9 +20,9 @@ module.exports = class ready extends Event {
 
 		console.log(`[${this.client.user.username}] Online~!`);
 		setInterval(async () => {
-            const statuses = [ `over ${(await this.client.getRESTGuilds()).length ?? 'NaN'} guilds`, 'zzz' ]
+            const statuses = [ `over ${(await this.client.getRESTGuilds()).length} guilds`, 'zzz' ]
             this.client.editStatus('idle', {
-                name: `${statuses[Math.floor(Math.random() * statuses.length)]}`,
+                name: statuses[Math.floor(Math.random() * statuses.length)],
                 type: Constants.ActivityTypes.WATCHING
             });
         }, 30000);

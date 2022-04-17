@@ -72,8 +72,9 @@ module.exports = class Warn extends Command {
     async execute(interaction, { subCommand, args }) {
         const guildId = interaction.guildID;
 
-        const member = interaction.data.resolved?.members?.get(args.member);
-        const bot = interaction.data.resolved?.members?.get(this.client.user.id);
+        const resolved = interaction.data.resolved.members;
+        const member = resolved.get(args.member);
+        const bot = resolved.get(this.client.user.id);
 
         const uuid = this.client.database.toUUID(args.member, guildId);
         const user = member && await this.client.database.getUser(uuid);

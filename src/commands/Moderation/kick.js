@@ -31,8 +31,9 @@ module.exports = class Ban extends Command {
 
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
-        const member = interaction.data.resolved?.members?.get(args.member);
-        const bot = interaction.data.resolved?.members?.get(this.client.user.id);
+        const resolved = interaction.data.resolved.members;
+        const member = resolved.get(args.member);
+        const bot = resolved.get(this.client.user.id);
         
         if (!member) return interaction.createFollowup(this.client.utils.errorEmbed('Could not find provided member.'));
         if (member.bot) return interaction.createFollowup(this.client.utils.errorEmbed('I refuse to kick another bot.'));

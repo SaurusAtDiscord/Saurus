@@ -24,7 +24,7 @@ module.exports = class Unmute extends Command {
 
     /* Calling the method "execute" on Command class. */
     async execute(interaction, args) {
-        const member = interaction.data.resolved?.members?.get(args.member);
+        const member = interaction.data.resolved.members.get(args.member);
         if (!member) return interaction.createFollowup(this.client.utils.errorEmbed('Could not find provided member.'));
         if (member.bot) return interaction.createFollowup(this.client.utils.errorEmbed('Unmuting/muting a bot is not permitted.'));
         if (member.id === interaction.member.id) return interaction.createFollowup(this.client.utils.errorEmbed('You cannot unmute yourself, silly.'));
