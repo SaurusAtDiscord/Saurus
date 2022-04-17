@@ -1,10 +1,23 @@
 'use strict';
+// TODO: Rewrite.
 
 const Command = require('@core/Command');
 const { Constants } = require('eris');
 const { randomUUID } = require('crypto');
 const button = require('@units/ComponentHandler');
 const collector = require('@units/InteractionCollector');
+
+/**
+ * Create a usage string for a command
+ * @param { String } name The name of the command.
+ * @param { Array } options An array of objects that describe the options that the command accepts.
+ * @returns { String } The usage string.
+ */
+function createUsage(name, options) {
+    let usage = `**/**${name} `;
+    options?.forEach(option => { usage += option.required ? `[${option.name}]` : `(${option.name})` });
+    return usage;
+}
 
 module.exports = class Help extends Command {
     constructor(client) {
@@ -20,27 +33,15 @@ module.exports = class Help extends Command {
         });
     }
 
-    /**
-     * Create a usage string for a command
-     * @param { String } name The name of the command.
-     * @param { Array } options An array of objects that describe the options that the command accepts.
-     * @returns { String } The usage string.
-     */
-    createUsage(name, options) {
-        let usage = `**/**${name} `;
-        options?.forEach(option => { usage += option.required ? `[${option.name}]` : `(${option.name})` });
-        return usage;
-    }
-
     /* Calling the method "execute" on Command class. */
-    async execute(interaction, args) {
+    execute(interaction, args) {
         if (!Object.keys(args).length) {
             const component = new button();
             const uniId = randomUUID().substring(0, 5);
-
+            
             this.client.categories.forEach(category => component.createButton(category, Constants.ButtonStyles.SECONDARY, `${uniId} ${interaction.member.id} ${category}`));
             component.createRow();
-            component.createButton('Support', Constants.ButtonStyles.LINK, 'https://discord.gg/DEHSHTEj3h');
+            component.createButton('Support', Constants.ButtonStyles.LINK, 'https://discord.gg/zXkvBrCFuU');
 
             interaction.createFollowup({ 
                 embed: {
@@ -51,9 +52,9 @@ module.exports = class Help extends Command {
                 components: component.parse()
             });
             
-            return new collector(this.client, {
-                time: 60000,
-                filter: i => (i.data.custom_id.split(' ')[0] === uniId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
+            return new collector({ client: this.client, channel: interaction.channel }, {
+                timeLimit: 60000,
+                filter: i => (i.data.custom_id.split(' ')[0] === uniId) && interaction.member.id === i.member.id
             }).on('collect', res => {
                 const data = res.data.custom_id;
                 const is_category = this.client.categories.find(category => category === data.split(' ')[2]);
@@ -89,12 +90,12 @@ module.exports = class Help extends Command {
                 color: 0xCDE9F6
             }});
         } else if (is_cmd) {
-            const usage = this.createUsage(is_cmd.name, is_cmd.options);
+            const usage = createUsage(is_cmd.name, is_cmd.options);
 
             const [cmdName, ...cmdArgs] = usage.split(' ');
             const subCommands = is_cmd.options?.filter(option => option.type === Constants.ApplicationCommandOptionTypes.SUB_COMMAND);
 
-            const userPermissionsStringed = Object.keys(is_cmd.subCommandUserPermissions).length ? 'Permissions may differ per sub-command' : is_cmd.userPermissions.join(', ');
+            const userPermissionsStringed = Object.keys(is_cmd.subCommandUserPermissions)?.length ? 'Permissions may differ per sub-command' : is_cmd.userPermissions.join(', ');
             const usageStringed = subCommands?.length ? 'This command contains sub-commands, check the embed below' : (cmdArgs[0]?.length ? `${cmdName} \`${cmdArgs}\`` : 'No usage-example');
             
             const embed = { embeds: [{
@@ -109,7 +110,7 @@ module.exports = class Help extends Command {
             }]}
 
             if (subCommands?.length) embed.embeds.push({ title: 'Sub-Commands', fields: subCommands.map(sub => {
-                const subUsage = this.createUsage(`${is_cmd.name} ${sub.name}`, sub.options);
+                const subUsage = createUsage(`${is_cmd.name} ${sub.name}`, sub.options);
 
                 const subPerms = is_cmd.subCommandUserPermissions[sub.name];
                 const [, subName, subArgs] = subUsage.match(/^(.{5}\w+ \w+)\s(.+)/i);

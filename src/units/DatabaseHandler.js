@@ -10,8 +10,8 @@ module.exports = class Database {
 
     /**
      * It takes a user ID and a guild ID, adds them together, and returns the result as a string.
-     * @param id The id of the user
-     * @param guildId The id of the guild the user is in.
+     * @param { String } id The id of the user
+     * @param { String } guildId The id of the guild the user is in.
      * @returns { String } The return value is the sum of the two ids.
      */
     toUUID(id, guildId) {
@@ -20,11 +20,10 @@ module.exports = class Database {
 
     /**
      * Connects to the database and returns a client in the form of a Promise.
-     * @param { Function } func The function to run.
      * @returns { Promise } Returns a promise that resolves to the database client.
      */
-    async fire(func) {
-        return this.#prismaClient[func]();
+    async connect() {
+        return this.#prismaClient.$connect();
     }
 
     /**

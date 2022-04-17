@@ -59,7 +59,7 @@ module.exports = class Mute extends Command {
             time: 60000,
             maxMatches: 1,
             filter: i => (i.data.custom_id.match(/(?<iden>^id)(?<id>.{5})/).groups.id === identId) && (i.message.channel.id === interaction.channel.id) && (interaction.member.id === i.member.id)
-        }).lastIndex;
+        }).lastInteraction;
         if (!choice.length) return interaction.editOriginalMessage(Object.assign(this.client.utils.errorEmbed('You did not respond in time.'), { components: [] }));
         
         const time = choice[0].interaction.data.custom_id.match(/(?<iden>time)(?<time>.+)/).groups.time;
@@ -76,7 +76,7 @@ module.exports = class Mute extends Command {
         const poop2 = oldCDU ? 'to' : 'for';
 
         interaction.editOriginalMessage({ embed: { description: `${poop} \`${member.username}#${member.discriminator}\` ${poop2} **${time}**`, color: 0x77DD77 }, components: [] });
-        return (new modLogs(this.client, { interaction, guilty: member })).postModLog(`$${interaction.member.mention} has muted ${member.mention} for **${time}**`, {
+        return (new modLogs(this.client, interaction)).postModLog(`$${interaction.member.mention} has muted ${member.mention} for **${time}**`, {
             name: 'Information',
             value: `• Moderator: \`${interaction.member.username}#${interaction.member.discriminator}\`\n• Action Against: ${member.username}#${member.discriminator}`
         });

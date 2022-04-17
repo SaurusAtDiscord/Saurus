@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "axios": "^0.26.1",
     "dotenv": "^16.0.0",
     "eris": "ThatBlueDevil/eris",
     "eventemitter2": "^6.4.5",
@@ -22,8 +23,8 @@
     "zlib-sync": "^0.1.7"
   },
   "devDependencies": {
-    "@sentry/node": "^6.19.6",
     "@prisma/client": "^3.12.0",
+    "@sentry/node": "^6.19.6",
     "eslint": "^8.9.0",
     "eslint-plugin-sonarjs": "^0.12.0"
   },

@@ -19,7 +19,7 @@ module.exports = class Serverinfo extends Command {
         const guildOwner = await this.client.utils.getUser(guild.ownerID);
         const members = await guild.fetchMembers();
 
-        const roles = guild.roles?.map(role => role)?.sort((a, b) => b?.position - a?.position).filter(role => role?.name !== '@everyone');
+        const roles = guild.roles && guild.roles.map(role => role)?.sort((a, b) => b?.position - a?.position).filter(role => role?.name !== '@everyone');
         const stringedRoles = roles?.map(role => `<@&${role?.id}>`);
 
         const createdAt = DateTime.fromMillis(guild.createdAt);

@@ -56,7 +56,7 @@ module.exports = class Ban extends Command {
         }
         
         interaction.createFollowup({ embed: { description: `${member.mention} has been banned ${reason}`, color: 0x77DD77 }});
-        return (new modLogs(this.client, { interaction })).postModLog(`${interaction.member.mention} banned ${member.mention} ${reason}`, {
+        return (new modLogs(this.client, interaction)).postModLog(`${interaction.member.mention} banned ${member.mention} ${reason}`, {
             name: 'Information',
             value: `• Moderator: \`${interaction.member.username}#${interaction.member.discriminator}\`\n• Action Against: \`${member.username}#${member.discriminator}\`${sigh}`
         });

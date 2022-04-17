@@ -94,6 +94,6 @@ module.exports = class Utils {
         const isGuildOwner = (member1?.id === guildOwner && member2?.id !== guildOwner);
         const hasAdministrator = member1?.permissions?.has('administrator');
         const higherRole = this.highestRole(member1)?.position <= this.highestRole(member2)?.position;
-        return isGuildOwner || higherRole || hasAdministrator;
+        return isGuildOwner || (higherRole && !hasAdministrator) || hasAdministrator;
     }
 }

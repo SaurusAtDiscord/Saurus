@@ -3,28 +3,21 @@
 const { Constants } = require('eris');
 
 module.exports = class ModLogs {
-    constructor(client, data) {
+    constructor(client, interaction) {
         this.client = client;
-        this.interaction = data.interaction;
-        this.guildId = data.interaction.guildID;
+        this.interaction = interaction;
+        this.guildId = interaction.guildID;
     }
 
     /**
-     * Creates a channel called "mod-logs" if it doesn't exist, and then returns the channel object.
+     * Gets the moderation channel for the guild or creates one if it doesn't exist
      * @returns { Eris.Channel } The channel object.
      */
     async #getPostChannel() {
         const guild = await this.client.utils.getGuild(this.guildId);
         const modLogChannel = guild.channels.find(channel => channel.name === 'mod-logs');
         return modLogChannel ?? guild.createChannel('mod-logs', 0, 'Saurus ModLogs').then(channel =>
-        this.client.editChannel(channel.id, {
-            permissionOverwrites: [{
-                id: this.guildId,
-                type: 0,
-                allow: null,
-                deny: Constants.Permissions.viewChannel
-            }]
-        }));
+        channel.editPermission(this.guildId, null, Constants.Permission.viewChannel, 0));
     }
 
     /**
@@ -38,7 +31,7 @@ module.exports = class ModLogs {
     }
 
     /**
-     * Returns whether the modlogs module is enabled for this guild or not.
+     * Returns whether the modlogs module is enabled for this guild or not
      * @return { Promise<Boolean> } Whether the modlogs module is enabled for this guild or not.
      */
     async modLogsEnabled() {
@@ -46,7 +39,7 @@ module.exports = class ModLogs {
     }
 
     /**
-     * Send a mod log to the mod log channel
+     * Send a log to the moderation channel
      * @param { String } text The text to send to the modlog.
      */
     async postModLog(text, info) {

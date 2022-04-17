@@ -132,7 +132,7 @@ module.exports = class Warn extends Command {
             break;
         }
 
-        if (modLogInfo) return (new modLogs(this.client, { interaction, guilty: member })).postModLog(modLogInfo, {
+        if (modLogInfo) return (new modLogs(this.client, interaction)).postModLog(modLogInfo, {
             name: 'Information',
             value: `• Moderator: \`${interaction.member.username}#${interaction.member.discriminator}\`\n• Action Against: \`${member.username}#${member.discriminator}\``
         });

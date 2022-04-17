@@ -7,10 +7,6 @@ const { readdirSync } = require('fs');
 const { join } = require('path');
 
 module.exports = class SaurusNode extends Eris.Client {
-    /**
-     * Create Saurus Node.
-     * @param { String } key The bot's token.
-     */
     constructor(key) {
         super(key, {
             restMode: true,
@@ -34,7 +30,7 @@ module.exports = class SaurusNode extends Eris.Client {
     }
 
     /**
-     * Loads all the commands in the commands directory.
+     * Loads all the commands in the directory.
      * @param { String } dir The directory to load commands from.
      */
     #loadCommands(dir) {
@@ -47,7 +43,7 @@ module.exports = class SaurusNode extends Eris.Client {
     }
 
     /**
-     * Load all the JavaScript files in the events directory and execute them.
+     * Loads all the events in the directory.
      * @param { String } dir The directory to load events from.
      */
     #loadEvents(dir) {        
@@ -67,6 +63,6 @@ module.exports = class SaurusNode extends Eris.Client {
         this.#loadEvents(join(__dirname, '../events'));
 
         init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV, attachStacktrace: true });
-        Promise.all([this.database.fire('$connect'), this.connect()]);
+        Promise.all([this.database.connect(), this.connect()]);
     }
 }

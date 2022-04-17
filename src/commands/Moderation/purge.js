@@ -28,7 +28,7 @@ module.exports = class Purge extends Command {
         const channel = interaction.channel;
         (await channel.getMessages({ limit: amount + 1 }))?.forEach(message => channel.deleteMessage(message?.id));
         
-        return (new modLogs(this.client, { interaction })).postModLog(`${interaction.member.mention} purged ${amount} messages`, {
+        return (new modLogs(this.client, interaction)).postModLog(`${interaction.member.mention} purged ${amount} messages`, {
             name: 'Information',
             value: `• Moderator: \`${interaction.member.username}#${interaction.member.discriminator}\`\n• Channel: ${channel.mention}`
         });

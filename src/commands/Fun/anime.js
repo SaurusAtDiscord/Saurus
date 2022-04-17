@@ -3,7 +3,7 @@
 const Command = require('@core/Command');
 const { Constants } = require('eris');
 
-const fetch = require('node-fetch');
+const axios = require('axios');
 
 module.exports = class Anime extends Command {
     constructor(client) {
@@ -22,7 +22,7 @@ module.exports = class Anime extends Command {
 
     /* Calling the method "execute" on Command class. */
     async execute(interaction, { query }) {
-        const _query = `
+        const ql = `
             query ($name: String) {
                 Media (search: $name, type: ANIME) {
                     siteUrl
@@ -34,18 +34,22 @@ module.exports = class Anime extends Command {
                 }
             }
         `
-
-        const queried = await fetch('https://graphql.anilist.co', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({ query: _query, variables: { name: query }})
-        });
-
-        let result = await (queried?.json()?.then(res => res.errors ? null : res));
-        if (!result) return interaction.createFollowup(this.client.utils.errorEmbed('Could not find any results based on what you searched.'));
-        result = result.data.Media;
         
-        const description = (result.description.replace(/<[^>]+>/ig, '')).replace(/\(Source: .+\)/gm, '');
+        let result;
+        try {
+            result = await axios({
+                method: 'post',
+                url: 'https://graphql.anilist.co',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                data: JSON.stringify({ query: ql, variables: { name: query }})
+            });
+        } catch (err) {
+            if (axios.isAxiosError(err)) return interaction.createFollowup(this.client.utils.errorEmbed('Could not find any results based on what you searched.'));
+        }
+        
+        result = result.data.data.Media;
+        let description = result.description;
+        [/<[^>]+>/ig, /\(Source: .+\)/gm].forEach(reg => { description = description.replace(reg, '') });
         return interaction.createFollowup({ embed: {
             author: {
                 name: (result.title.english ?? result.title.native ?? result.title.romaji),

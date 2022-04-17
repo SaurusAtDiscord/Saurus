@@ -1,11 +1,6 @@
 'use strict';
 
 module.exports = class Command {
-    /**
-     * Command structure.
-     * @param { Eris.Client } client The client.
-     * @param { Object } options Options for the command.
-     */
     constructor(client, options) {
         this.client = client;
 

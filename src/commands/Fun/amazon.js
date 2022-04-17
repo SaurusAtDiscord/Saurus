@@ -26,7 +26,7 @@ module.exports = class Amazon extends Command {
         if (!queryFor) return interaction.createFollowup(this.client.utils.errorEmbed('Could not find any results based on what you searched.'));
         
         const oldLength = queryFor.length;
-        const title = query.length >= 125 ? (query.substring(0, 125) + '...') : query;
+        const title = query.length >= 125 ? `${query.substring(0, 125)}...` : query;
         
         if (queryFor.length > 5) queryFor = queryFor.slice(0, 5);
         return interaction.createFollowup({ embed: {
