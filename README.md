@@ -1,5 +1,8 @@
 # Saurus
 Saurus is a bot made for discord—purposing to moderation and user utilities.
 
+## Notice
+You are not allowed to use Saurus in any way of intentions to make profit, nor can you upload Saurus to any bot-lists.
+
 ## Status
-Currently Saurus is still in it's development stage, will most likely stay that way for a bit.
+Saurus will not be live as it's still in development stage.
